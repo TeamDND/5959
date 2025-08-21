@@ -36,7 +36,7 @@ class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     OPENAI_API_KEY_SELF = os.getenv("OPENAI_API_KEY_SELF")  # self 관련 기능 전용
     ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    GEMINI_API_KEY = os.getenv('API_KEY')
     
     # Gemini API 설정
     GEMINI_API_URL = os.getenv('GEMINI_API_URL', "https://generativelanguage.googleapis.com/v1beta/models")

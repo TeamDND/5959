@@ -660,7 +660,7 @@ function PostureMonitor() {
             
 
             <div className="container">
-                <div className="card">
+                
                     {/* 모니터링 설정 섹션 */}
                     <div className="settings-section">
                         <h3>⚙️ 모니터링 설정</h3>
@@ -909,7 +909,7 @@ function PostureMonitor() {
                             )}
                         </div>
                     </div>
-                </div>
+                
             </div>
             </Layout>
             
