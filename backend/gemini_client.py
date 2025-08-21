@@ -2,12 +2,12 @@ import os
 import json
 import requests
 from typing import Optional
-from config import GEMINI_API_URL, API_KEY
+from config import GEMINI_API_URL, GEMINI_API_KEY
 
 class GeminiClient:
     def __init__(self):
         self.api_url = GEMINI_API_URL
-        self.api_key = API_KEY
+        self.api_key = GEMINI_API_KEY
         
     def call_gemini_api(self, prompt: str) -> str:
         """

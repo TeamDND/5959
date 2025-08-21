@@ -34,6 +34,7 @@ class Config:
     
     # API 키들
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_API_KEY_SELF = os.getenv("OPENAI_API_KEY_SELF")  # self 관련 기능 전용
     ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
     GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
     
@@ -75,8 +76,16 @@ def get_openai_client():
         return openai.OpenAI(api_key=api_key)
     return None
 
+def get_openai_client_self():
+    """Self 관련 기능용 OpenAI 클라이언트를 반환합니다."""
+    api_key = os.getenv("OPENAI_API_KEY_SELF")
+    if api_key:
+        return openai.OpenAI(api_key=api_key)
+    return None
+
 # 전역 클라이언트 인스턴스
 CLIENT = get_openai_client()
+CLIENT_SELF = get_openai_client_self()
 
 # 기존 코드와의 호환성을 위한 전역 변수들
 GEMINI_API_URL = Config.GEMINI_API_URL
@@ -87,6 +96,7 @@ FLASK_DEBUG = Config.FLASK_DEBUG
 FLASK_HOST = Config.HOST
 FLASK_PORT = Config.PORT
 OPENAI_API_KEY = Config.OPENAI_API_KEY
+OPENAI_API_KEY_SELF = Config.OPENAI_API_KEY_SELF
 ANTHROPIC_API_KEY = Config.ANTHROPIC_API_KEY
 
 # # Tesseract-OCR 경로 설정 (필요시 주석 해제)
