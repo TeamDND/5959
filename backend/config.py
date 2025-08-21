@@ -1,12 +1,10 @@
 import os
 from dotenv import load_dotenv
 import openai
-import pytesseract
+# import pytesseract
 
 # .env 파일 로드
 load_dotenv()
-
-
 
 class Config:
     """기본 설정"""
@@ -23,9 +21,24 @@ class Config:
     HOST = os.environ.get('HOST') or '0.0.0.0'
     PORT = int(os.environ.get('PORT', '5000'))
     
+    # Flask 환경 설정
+    FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+    FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
+    
+    # CORS 설정
+    CORS_ORIGIN = os.getenv('CORS_ORIGIN', 'http://localhost:3000')
+    
     # 로깅 설정
     LOG_LEVEL = os.environ.get('LOG_LEVEL') or 'INFO'
     LOG_FILE = os.environ.get('LOG_FILE') or 'app.log'
+    
+    # API 키들
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    
+    # Gemini API 설정
+    GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 
 class DevelopmentConfig(Config):
     """개발 환경 설정"""
@@ -54,32 +67,31 @@ config = {
     'testing': TestingConfig,
     'default': DevelopmentConfig
 }
-# Gemini API 설정
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-# Flask 앱 설정
-FLASK_ENV = os.getenv('FLASK_ENV', 'development')
-FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
-FLASK_HOST = os.getenv('FLASK_HOST', '0.0.0.0')
-FLASK_PORT = int(os.getenv('FLASK_PORT', 5000))
+def get_openai_client():
+    """OpenAI 클라이언트를 반환합니다."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        return openai.OpenAI(api_key=api_key)
+    return None
 
-# CORS 설정
-CORS_ORIGIN = os.getenv('CORS_ORIGIN', 'http://localhost:3000')
+# 전역 클라이언트 인스턴스
+CLIENT = get_openai_client()
 
-# # Tesseract-OCR 경로 설정
+# 기존 코드와의 호환성을 위한 전역 변수들
+GEMINI_API_URL = Config.GEMINI_API_URL
+GEMINI_API_KEY = Config.GEMINI_API_KEY
+API_KEY = Config.GEMINI_API_KEY  # API_KEY는 GEMINI_API_KEY의 별칭
+CORS_ORIGIN = Config.CORS_ORIGIN
+FLASK_DEBUG = Config.FLASK_DEBUG
+FLASK_HOST = Config.HOST
+FLASK_PORT = Config.PORT
+OPENAI_API_KEY = Config.OPENAI_API_KEY
+ANTHROPIC_API_KEY = Config.ANTHROPIC_API_KEY
+
+# # Tesseract-OCR 경로 설정 (필요시 주석 해제)
 # TESSERACT_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # if os.path.exists(TESSERACT_PATH):
 #     pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 # else:
 #     print(f"경고: Tesseract-OCR 경로를 찾을 수 없습니다: {TESSERACT_PATH}")
-
-# OpenAI API 키 설정
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-def get_openai_client():
-    """OpenAI 클라이언트를 반환합니다."""
-    if OPENAI_API_KEY:
-        return openai.OpenAI(api_key=OPENAI_API_KEY)
-    return None
-
-CLIENT = get_openai_client()
