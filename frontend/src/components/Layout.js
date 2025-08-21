@@ -49,7 +49,7 @@ function Layout({ children }) {
                         e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
                     }}
                 >
-                    🏠
+                    <img src='/home.jpg' style={{ width: '60px', height: '60px',borderRadius: '50%'}}/>
                 </button>
             </div>
 
