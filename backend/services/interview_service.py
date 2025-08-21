@@ -26,17 +26,35 @@ class InterviewService:
         }
     
     def select_questions(self, questions: List[str], num_questions: int, difficulty_level: str) -> List[Dict]:
-        if difficulty_level == "기초":
-            selected = questions[:10]
-        elif difficulty_level == "중급":
-            selected = questions[10:25]
-        elif difficulty_level == "고급":
-            selected = questions[25:40]
+        if not questions or len(questions) == 0:
+            # 기본 질문 사용
+            questions = [
+                "자기소개를 해주세요.",
+                "이 직무에 지원한 이유는 무엇인가요?",
+                "본인의 강점과 약점은 무엇인가요?",
+                "팀워크 경험에 대해 말씀해주세요.",
+                "스트레스를 어떻게 관리하시나요?"
+            ]
+        
+        if difficulty_level == "기초" or difficulty_level == "basic":
+            available_questions = questions[:min(len(questions), 15)]
+        elif difficulty_level == "중급" or difficulty_level == "intermediate":
+            start_idx = min(10, len(questions) // 3)
+            end_idx = min(len(questions), start_idx + 15)
+            available_questions = questions[start_idx:end_idx]
+        elif difficulty_level == "고급" or difficulty_level == "advanced":
+            start_idx = min(25, len(questions) * 2 // 3)
+            available_questions = questions[start_idx:]
         else:  # 혼합
-            basic = random.sample(questions[:10], min(3, num_questions // 3))
-            intermediate = random.sample(questions[10:25], min(5, num_questions // 2))
-            advanced = random.sample(questions[25:40], min(7, num_questions - len(basic) - len(intermediate)))
-            selected = basic + intermediate + advanced
+            # 전체 질문에서 고르게 선택
+            available_questions = questions
+        
+        # 요청된 수만큼 선택
+        if len(available_questions) >= num_questions:
+            selected = random.sample(available_questions, num_questions)
+        else:
+            # 사용 가능한 질문이 부족하면 전체 사용
+            selected = available_questions
         
         random.shuffle(selected)
         selected = selected[:num_questions]
@@ -51,9 +69,9 @@ class InterviewService:
                 level = "고급"
             
             structured_questions.append({
-                "question": question,
+                "text": question,
                 "difficulty": level,
-                "time_limit": self.difficulty_time_limits[level],
+                "timeLimit": self.difficulty_time_limits.get(level, 180),  # 기본 3분
                 "question_number": i + 1
             })
         

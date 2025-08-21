@@ -57,7 +57,7 @@ class ReportGenerator:
         except:
             return str(text)
     
-    async def create_pdf_report(self, session_data: Dict) -> str:
+    def create_pdf_report(self, session_data: Dict) -> str:
         filename = f"interview_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         file_path = os.path.join(self.output_dir, filename)
         
