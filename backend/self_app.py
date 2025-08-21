@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from PIL import Image
 import pytesseract
 
-from config import CLIENT, OPENAI_API_KEY as API_KEY
+from config import CLIENT_SELF as CLIENT, OPENAI_API_KEY_SELF as API_KEY
 from self_util import extract_text_from_file, preprocess_image_for_ocr
 from services.self_service import generate_ai_answer, crawl_website
 

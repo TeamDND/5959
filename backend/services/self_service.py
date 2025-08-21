@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
-from config import CLIENT, OPENAI_API_KEY as API_KEY
+from config import CLIENT_SELF as CLIENT, OPENAI_API_KEY_SELF as API_KEY
 from self_util import basic_question_parsing_with_keywords
 
 def ai_smart_parse_questions(question_text):
