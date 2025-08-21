@@ -13,7 +13,7 @@ class GeminiClient:
         """
         Gemini API를 호출하여 공감 기반의 응답을 받는 함수입니다.
         """
-        url = f"{self.api_url}{self.api_key}"
+        url = f"{self.api_url}/gemini-1.5-flash:generateContent?key={self.api_key}"
         headers = {
             'Content-Type': 'application/json'
         }
