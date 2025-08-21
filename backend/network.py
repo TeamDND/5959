@@ -1,5 +1,9 @@
 from flask import request, jsonify
-from config import get_openai_client
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def networking_ai():
     """네트워킹 AI API - LinkedIn 메시지, 이메일 템플릿, 시뮬레이션 생성"""
@@ -17,9 +21,11 @@ def networking_ai():
             return jsonify({'error': '타입과 입력이 필요합니다.'}), 400
         
         # OpenAI 클라이언트 가져오기
-        openai_client = get_openai_client()
-        if not openai_client:
+        api_key = os.getenv("SECRET_KEY")
+        if not api_key:
             return jsonify({'error': 'OpenAI 서비스를 사용할 수 없습니다. API 키를 확인해주세요.'}), 500
+        
+        openai_client = openai.OpenAI(api_key=api_key)
         
         # AI 프롬프트 생성
         prompt = generate_networking_prompt(ai_type, user_input, user_context)
