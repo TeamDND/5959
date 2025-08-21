@@ -1,0 +1,464 @@
+/* PostureMonitor.css - CSS.txt 색상 적용 */
+
+/* 메인 컨테이너 */
+.posture-monitor {
+  min-height: 100vh;
+  background-color: var(--white);
+  color: #333;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* 헤더 스타일 */
+.posture-monitor .header {
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 20px;
+  text-align: center;
+}
+
+.posture-monitor .header h1 {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* 컨테이너 스타일 */
+.posture-monitor .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 카드 스타일 */
+.posture-monitor .card {
+  background-color: var(--white);
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 설정 섹션 */
+.posture-monitor .settings-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.posture-monitor .settings-section h3 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.posture-monitor .settings-grid {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.posture-monitor .setting-group {
+  flex: 1;
+  min-width: 250px;
+}
+
+.posture-monitor .setting-group h4 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* 라디오 버튼 그룹 */
+.posture-monitor .radio-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.posture-monitor .radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.posture-monitor .radio-label input[type="radio"] {
+  margin-right: 8px;
+}
+
+.posture-monitor .radio-label span {
+  font-weight: normal;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.posture-monitor .radio-label input[type="radio"]:checked + span {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* 슬라이더 스타일 */
+.posture-monitor .slider-container {
+  margin-bottom: 10px;
+}
+
+.posture-monitor .slider-container input[type="range"] {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.posture-monitor .slider-value {
+  text-align: center;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* 체크박스 스타일 */
+.posture-monitor .checkbox-container {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.posture-monitor .checkbox-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.posture-monitor .checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+.posture-monitor .checkbox-label span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.posture-monitor .checkbox-description {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.posture-monitor .checkbox-warning {
+  font-size: 11px;
+  color: var(--accent-color);
+  margin-top: 3px;
+}
+
+/* 설명 텍스트 */
+.posture-monitor .description-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* 이미지 섹션 */
+.posture-monitor .image-section {
+  margin-bottom: 30px;
+}
+
+.posture-monitor .image-section h3 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.posture-monitor .image-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.posture-monitor .image-container {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+}
+
+.posture-monitor .image-container h4 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.posture-monitor .image-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.posture-monitor .video-element {
+  width: 100%;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+}
+
+.posture-monitor .captured-image {
+  width: 100%;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+}
+
+.posture-monitor .placeholder-container {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #999;
+  background-color: #f8f9fa;
+}
+
+.posture-monitor .canvas-element {
+  display: none;
+}
+
+/* 버튼 스타일 */
+.posture-monitor .button-container {
+  margin-top: 15px;
+}
+
+.posture-monitor .btn {
+  font-family: 'Noto Sans', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.posture-monitor .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.posture-monitor .btn-primary:hover {
+  background-color: #004a7a;
+}
+
+.posture-monitor .btn-accent {
+  background-color: var(--accent-color);
+  color: var(--white);
+}
+
+.posture-monitor .btn-accent:hover {
+  background-color: #e05a00;
+}
+
+.posture-monitor .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 상태 표시 섹션 */
+.posture-monitor .status-section {
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 2px solid;
+}
+
+.posture-monitor .status-section.normal {
+  background-color: var(--secondary-color);
+  border-color: var(--primary-color);
+}
+
+.posture-monitor .status-section.warning,
+.posture-monitor .status-section.alert {
+  background-color: #ffcccc;
+  border-color: #ff0000;
+}
+
+.posture-monitor .status-section h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.posture-monitor .status-info {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.posture-monitor .status-info p {
+  font-weight: bold;
+}
+
+.posture-monitor .status-info .alert-count {
+  color: var(--accent-color);
+}
+
+.posture-monitor .status-info .normal-count {
+  color: var(--primary-color);
+}
+
+/* 분석 상세 정보 */
+.posture-monitor .analysis-details {
+  padding: 15px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.posture-monitor .analysis-details h4 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.posture-monitor .analysis-details p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.posture-monitor .analysis-setting-info {
+  margin-top: 10px;
+}
+
+/* 제어 버튼 섹션 */
+.posture-monitor .control-section {
+  text-align: center;
+}
+
+.posture-monitor .control-section .btn {
+  margin-right: 10px;
+}
+
+/* 미니 알림창 스타일 */
+.posture-monitor .mini-alert {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  opacity: 1;
+  font-family: 'Ownglyph Daelong', sans-serif;
+}
+
+.posture-monitor .mini-alert.hidden {
+  bottom: -100px;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.posture-monitor .mini-alert.warning {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  color: #856404;
+}
+
+.posture-monitor .mini-alert.alert {
+  background-color: #f8d7da;
+  border: 2px solid #dc3545;
+  color: #721c24;
+}
+
+.posture-monitor .mini-alert.normal {
+  background-color: #d1edff;
+  border: 2px solid #0084ff;
+  color: #005a9e;
+}
+
+.posture-monitor .mini-alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.posture-monitor .mini-alert-title {
+  display: flex;
+  align-items: center;
+}
+
+.posture-monitor .mini-alert-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.posture-monitor .mini-alert-title-text {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.posture-monitor .mini-alert-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.posture-monitor .mini-alert-close:hover {
+  opacity: 1;
+}
+
+.posture-monitor .mini-alert-body {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.posture-monitor .mini-alert-count {
+  font-size: 12px;
+  opacity: 0.8;
+  text-align: right;
+  font-weight: bold;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .posture-monitor .settings-grid {
+    flex-direction: column;
+  }
+  
+  .posture-monitor .image-grid {
+    flex-direction: column;
+  }
+  
+  .posture-monitor .image-container {
+    min-width: auto;
+  }
+  
+  .posture-monitor .status-info {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .posture-monitor .mini-alert {
+    width: 280px;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .posture-monitor .container {
+    padding: 10px;
+  }
+  
+  .posture-monitor .card {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  .posture-monitor .mini-alert {
+    width: calc(100vw - 20px);
+    right: 10px;
+    left: 10px;
+  }
+}

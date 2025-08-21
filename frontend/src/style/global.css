@@ -1,0 +1,275 @@
+@font-face {
+    font-family: 'Ownglyph_daelong-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2507-2@1.0/Ownglyph_daelong-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Google Fonts - Noto Sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* 전역 스타일 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: white;
+  color: #005793;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 색상 변수 */
+:root {
+  --primary-color: #005793;
+  --secondary-color: #E6F0F5;
+  --accent-color: #F76800;
+  --white: #ffffff;
+  --text-color: #005793;
+}
+
+/* 버튼 스타일 */
+.btn {
+  font-family: 'Noto Sans', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: #004a7a;
+}
+
+.btn-accent {
+  background-color: var(--accent-color);
+  color: var(--white);
+}
+
+.btn-accent:hover {
+  background-color: #e05a00;
+}
+
+
+
+/* 헤더 스타일 */
+.header {
+  background-color: var(--primary-color);
+  color: var(--white);
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+/* 레이아웃 스타일 */
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 20px;
+}
+
+/* 컨테이너 스타일 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 텍스트 스타일 */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+/* 메인 레이아웃 스타일 */
+.main-layout {
+  min-height: 100vh;
+}
+
+
+
+/* 섹션 스타일 */
+.overview-section,
+.components-section,
+.gallery-section,
+.palette-section,
+.font-section,
+.api-section,
+.text-cleanup-section,
+.interview-section {
+  padding: 60px 0;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+}
+
+.overview-section {
+  background-color: var(--white);
+}
+
+.components-section {
+  background-color: var(--primary-color);
+}
+
+.gallery-section {
+  background-color: var(--white);
+}
+
+.palette-section {
+  background-color: var(--primary-color);
+}
+
+.font-section {
+  background-color: var(--white);
+}
+
+.api-section {
+  background-color: var(--primary-color);
+}
+
+.text-cleanup-section {
+  background-color: var(--white);
+}
+
+.interview-section {
+  background-color: var(--primary-color);
+}
+
+/* 컴포넌트 그리드 */
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.component-card {
+  background-color: var(--white);
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.component-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  border-color: var(--accent-color);
+}
+
+.component-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+.component-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.component-card p {
+  color: var(--text-color);
+}
+
+/* 갤러리 그리드 */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.gallery-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-content p {
+  margin: 5px 0;
+}
+
+.aside-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.aside-item {
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-color);
+}

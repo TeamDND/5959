@@ -1,0 +1,134 @@
+/* 기본 리셋 및 전역 스타일 */
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #E6F0F5;
+  color: #333;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #005793;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #003d66;
+}
+
+/* 포커스 아웃라인 제거 */
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* 선택 영역 스타일 */
+::selection {
+  background-color: #005793;
+  color: white;
+}
+
+::-moz-selection {
+  background-color: #005793;
+  color: white;
+}
+
+/* 버튼 기본 스타일 초기화 */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* 입력 필드 기본 스타일 */
+input, textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+/* 링크 스타일 */
+a {
+  color: #005793;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 반응형 텍스트 크기 */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* 접근성을 위한 포커스 표시 */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #F76800;
+  outline-offset: 2px;
+}
+
+/* 애니메이션 감소를 원하는 사용자를 위한 설정 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 다크 모드 대응 (선택사항) */
+@media (prefers-color-scheme: dark) {
+  /* 현재는 라이트 테마만 사용하므로 주석 처리
+  body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+  */
+}
+
+/* 인쇄용 스타일 */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .emotion-indicator {
+    display: none !important;
+  }
+  
+  .input-container {
+    display: none !important;
+  }
+}

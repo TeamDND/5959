@@ -1,0 +1,65 @@
+{
+  "name": "mental-care-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI 기반 감정 분석과 개인 맞춤형 명언을 제공하는 멘탈케어 서비스",
+  "homepage": ".",
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.7.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.11.0",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.263.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.3.8",
+    "react-router-dom": "^7.8.1",
+    "react-scripts": "5.0.1",
+    "react-timer-hook": "^3.0.7",
+    "styled-components": "^6.1.0",
+    "swiper": "^11.2.10",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:5000",
+  "keywords": [
+    "mental-care",
+    "chatbot",
+    "ai",
+    "emotion-analysis",
+    "react",
+    "gemini-api"
+  ],
+  "author": {
+    "name": "Mental Care Team"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

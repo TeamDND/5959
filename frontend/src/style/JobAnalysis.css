@@ -1,0 +1,265 @@
+/* JobAnalysis.css - CSS.txt 색상 적용 */
+
+.job-analysis-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 0rem 3rem 0rem 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  max-width: 1400px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+}
+
+.job-analysis-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #005793;
+  font-weight: 700;
+  font-size: 2.5rem;
+}
+
+.job-analysis-main-container {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+  max-width: 1400px;
+  place-items: center;
+  margin-top: 45px;
+}
+
+@media (max-width: 768px) {
+  .job-analysis-main-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.job-analysis-input-section {
+  flex: 1;
+  min-width: 0;
+  max-width: 500px;
+}
+
+.job-analysis-result-section {
+  flex: 1;
+  min-width: 0;
+  min-width: 600px;
+}
+
+.job-analysis-input-group {
+  margin-bottom: 2.5rem;
+}
+
+.job-analysis-label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  color: #005793;
+  font-size: 1.1rem;
+}
+
+.job-analysis-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #E6F0F5;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  background-color: white;
+}
+
+.job-analysis-input:focus {
+  border-color: #005793;
+  outline: none;
+}
+
+.job-analysis-button {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--primary-color);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.job-analysis-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 87, 147, 0.3);
+}
+
+.job-analysis-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.job-analysis-loading-spinner {
+  border: 3px solid #E6F0F5;
+  border-top: 3px solid #005793;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.job-analysis-question-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #E6F0F5;
+  border-radius: 10px;
+}
+
+.job-analysis-question-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #005793;
+  font-size: 0.9rem;
+  color: #005793;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.job-analysis-question-item:last-child {
+  border-bottom: none;
+}
+
+.job-analysis-settings-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.job-analysis-select {
+  padding: 0.8rem;
+  border: 2px solid #E6F0F5;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #005793;
+}
+
+.job-analysis-select:focus {
+  border-color: #005793;
+  outline: none;
+}
+
+.job-analysis-tab-container {
+  display: flex;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid #E6F0F5;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.job-analysis-tab {
+  padding: 1.5rem 3rem;
+  background: transparent;
+  color: #005793;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+}
+
+.job-analysis-tab.active {
+  background: #005793;
+  color: white;
+  border-bottom: 3px solid #005793;
+}
+
+.job-analysis-tab:hover {
+  background: #E6F0F5;
+}
+
+.job-analysis-tab.active:hover {
+  background: #005793;
+}
+
+.job-analysis-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #E6F0F5;
+  border-radius: 10px;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: white;
+  color: #005793;
+}
+
+.job-analysis-textarea:focus {
+  border-color: #005793;
+  outline: none;
+}
+
+.job-analysis-job-info-card {
+  background: #E6F0F5;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #005793;
+}
+
+.job-analysis-job-info-item {
+  margin-bottom: 0.5rem;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  color: #005793;
+}
+
+.job-analysis-job-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.job-analysis-job-info-item strong {
+  color: #005793;
+  font-weight: 700;
+}
+
+.job-analysis-start-interview-button {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: #005793;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-top: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.job-analysis-start-interview-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(247, 104, 0, 0.3);
+}
+
+.job-analysis-section-title {
+  color: #005793;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
