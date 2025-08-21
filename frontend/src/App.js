@@ -9,7 +9,7 @@ import Interview from './components/Interview';
 import Result from './components/Result';
 import Self from './components/self';
 import Main from './components/Main';
-
+import NetworkingAI from './components/NetworkingAI';
 import { InterviewProvider } from './context/InterviewContext';
 import PostureMonitor from './components/PostureMonitor';
 import { Routes, Route } from 'react-router-dom';
@@ -28,6 +28,7 @@ function App() {
           <Route path="/posture" element={<PostureMonitor />} />
           <Route path="/result" element={<Result />} />
           <Route path="/self" element={<Self />} />
+          <Route path="/networking-ai" element={<NetworkingAI />} />
           
 
       </Routes>

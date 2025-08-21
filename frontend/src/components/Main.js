@@ -23,7 +23,7 @@ export default function Main() {
                         <button onClick={() => window.location.href='/mentalcare'}>AI 멘탈 상담</button>
                         <button onClick={() => window.location.href='/self'}>AI 자기소개서 작성</button>
                         <button onClick={() => window.location.href='/posture'}>자세교정</button>
-                        <button onClick={() => window.location.href='/posture'}>AI 네트워크</button>
+                        <button onClick={() => window.location.href='/networking-ai'}>AI 네트워크</button>
                     </div>
                 </div>
             </div>

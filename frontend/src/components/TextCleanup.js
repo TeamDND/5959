@@ -167,22 +167,22 @@ function TextCleanup() {
       return (
         <div className="result">
           <h3>📋 요약 결과</h3>
-          <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ color: '#667eea', marginBottom: '10px' }}>📊 분류 정보</h4>
-            <div style={{ background: '#f0f4ff', padding: '15px', borderRadius: '8px', whiteSpace: 'pre-line' }}>
+          <div className="result-section">
+            <h4 className="result-section-title">📊 분류 정보</h4>
+            <div className="result-section-content classification">
               {classification}
             </div>
           </div>
-          <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ color: '#667eea', marginBottom: '10px' }}>📋 주요 내용</h4>
-            <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px' }}>
+          <div className="result-section">
+            <h4 className="result-section-title">📋 주요 내용</h4>
+            <div className="result-section-content main-content">
               {mainContent}
             </div>
           </div>
           {isStudyContent && studyNotes && (
-            <div>
-              <h4 style={{ color: '#28a745', marginBottom: '10px' }}>📚 공부 내용 정리</h4>
-              <div style={{ background: '#f0fff4', padding: '15px', borderRadius: '8px', whiteSpace: 'pre-line', borderLeft: '4px solid #28a745' }}>
+            <div className="result-section">
+              <h4 className="result-section-title">📚 공부 내용 정리</h4>
+              <div className="result-section-content study-content">
                 {studyNotes}
               </div>
             </div>
@@ -190,20 +190,15 @@ function TextCleanup() {
           
           {/* 공부 내용으로 분류된 경우에만 이미지 생성 버튼 표시 */}
           {isStudyContent && (
-            <div style={{ marginTop: '30px', textAlign: 'center' }}>
+            <div className="image-generation-section">
               <button 
-                className="submit-btn"
+                className="submit-btn image-generation-btn"
                 onClick={generateImage}
                 disabled={isGeneratingImage}
-                style={{ 
-                  backgroundColor: '#28a745', 
-                  marginRight: '10px',
-                  minWidth: '150px'
-                }}
               >
                 {isGeneratingImage ? '🖼️ 이미지 생성 중...' : '🖼️ 요약 내용을 이미지로 변환'}
               </button>
-              <div style={{ marginTop: '10px', fontSize: '12px', color: '#666' }}>
+              <div className="image-generation-info">
                 💡 공부 내용을 시각적 학습 자료로 변환합니다
               </div>
             </div>
@@ -211,38 +206,28 @@ function TextCleanup() {
 
           {/* 생성된 이미지 표시 */}
           {isGeneratingImage && (
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <div className="generating-message">
               <p>AI가 공부 내용을 이미지로 변환하고 있습니다...</p>
             </div>
           )}
 
           {generatedImage && (
-            <div style={{ marginTop: '30px' }}>
-              <h4 style={{ color: '#28a745', marginBottom: '15px', textAlign: 'center' }}>🎨 생성된 학습 노트</h4>
-              <div style={{ textAlign: 'center' }}>
+            <div className="generated-image-section">
+              <h4 className="generated-image-title">🎨 생성된 학습 노트</h4>
+              <div className="generated-image-container">
                 <iframe 
                   src={generatedImage} 
-                  style={{ 
-                    width: '100%', 
-                    height: '600px', 
-                    border: 'none',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                  }} 
+                  className="generated-image-frame"
                   title="학습 노트"
                 />
-                <div style={{ marginTop: '15px' }}>
+                <div className="download-button-container">
                   <button 
-                    className="submit-btn"
+                    className="submit-btn download-btn"
                     onClick={() => {
                       const link = document.createElement('a');
                       link.href = generatedImage;
                       link.download = '학습노트.html';
                       link.click();
-                    }}
-                    style={{ 
-                      backgroundColor: '#007bff',
-                      marginRight: '10px'
                     }}
                   >
                     💾 학습 노트 다운로드 (HTML)
@@ -278,12 +263,12 @@ function TextCleanup() {
 
   return (
     <Layout>
-      <div className="text-cleanup">
+      <div className="container">
         <div className="header">
           <h1>🤖 AI 요약 도구</h1>
         </div>
 
-      <div className="container">
+      <div className="content-wrapper">
         <div className="tabs">
           <button 
             className={`tab ${activeTab === 'text' ? 'active' : ''}`}

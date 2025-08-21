@@ -24,6 +24,7 @@ from services.report_generator import ReportGenerator
 from posture_analyzer import PostureAnalyzer
 from TextCleanup import summarize_api, generate_image_api
 from self_app import self_bp
+from network import networking_ai
 
 
 app = Flask(__name__)
@@ -317,6 +318,11 @@ def download_report(filename):
 def health_check():
     """서버 상태 확인"""
     return jsonify({"status": "healthy"})
+
+@app.route('/api/networking-ai', methods=['POST'])
+def networking_ai_route():
+    """네트워킹 AI API 라우트"""
+    return networking_ai()
 # 자세 관련 API 라우트들
 @app.route('/api/posture/setup', methods=['POST'])
 def posture_setup():

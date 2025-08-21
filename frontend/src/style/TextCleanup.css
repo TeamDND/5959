@@ -2,29 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* TextCleanup 컴포넌트 스타일 */
-.text-cleanup {
+.container {
   font-family: 'Noto Sans', sans-serif;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.text-cleanup .header {
+.container .header {
   text-align: center;
   margin-bottom: 30px;
   background-color: white;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
+
   padding: 20px;
 }
 
-.text-cleanup .header h1 {
+.container .header h1 {
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 10px;
 }
 
-.text-cleanup .container {
+.content-wrapper {
   background: white;
   border-radius: 15px;
   padding: 30px;
@@ -194,17 +193,104 @@
   color: #721c24;
 }
 
+/* 결과 섹션 스타일 */
+.result-section {
+  margin-bottom: 20px;
+}
+
+.result-section-title {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.result-section-content {
+  background: var(--secondary-color);
+  padding: 15px;
+  border-radius: 8px;
+  white-space: pre-line;
+}
+
+.result-section-content.main-content {
+  background: #f8f9fa;
+}
+
+.result-section-content.study-content {
+  background: #f0fff4;
+  border-left: 4px solid #28a745;
+}
+
+.result-section-content.classification {
+  background: #f0f4ff;
+}
+
+/* 이미지 생성 버튼 영역 */
+.image-generation-section {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.image-generation-btn {
+  background-color: #28a745 !important;
+  margin-right: 10px;
+  min-width: 150px;
+}
+
+.image-generation-info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* 생성 중 표시 */
+.generating-message {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* 생성된 이미지 영역 */
+.generated-image-section {
+  margin-top: 30px;
+}
+
+.generated-image-title {
+  color: #28a745;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.generated-image-container {
+  text-align: center;
+}
+
+.generated-image-frame {
+  width: 100%;
+  height: 600px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.download-btn {
+  background-color: #007bff !important;
+  margin-right: 10px;
+}
+
+.download-button-container {
+  margin-top: 15px;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .text-cleanup {
+  .container {
     padding: 10px;
   }
   
-  .text-cleanup .container {
+  .content-wrapper {
     padding: 20px;
   }
   
-  .text-cleanup .header h1 {
+  .container .header h1 {
     font-size: 2rem;
   }
   

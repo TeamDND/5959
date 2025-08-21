@@ -70,7 +70,7 @@ config = {
 
 def get_openai_client():
     """OpenAI 클라이언트를 반환합니다."""
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("SECRET_KEY")
     if api_key:
         return openai.OpenAI(api_key=api_key)
     return None
