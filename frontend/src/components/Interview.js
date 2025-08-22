@@ -845,7 +845,7 @@ export default function Interview() {
               • 답변 후 텍스트 수정이 가능합니다
             </div>
           </div>
-          
+            
           <div className="interview-voice-textarea">
             {recognitionText || '🎙️ 마이크 버튼을 눌러 음성으로 답변해주세요...'}
           </div>
