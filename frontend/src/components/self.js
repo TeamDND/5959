@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import '../style/App.css';
+import '../style/Self.css';
 import Layout from './Layout.js';
 
 function Self() {
@@ -119,10 +120,14 @@ function Self() {
     }
   };
   return (
+    <>
     <Layout>
+      <div className="title-wrapper">
+        <div className="title">
+          <h2>✒️AI 자기소개서 답변 생성기</h2>
+          <p>텍스트, 이미지, 링크를 분석하여 분류하고 요약해드립니다</p>
+        </div>
       <div className="container">
-        <h1>AI 자소서 답변 생성기</h1>
-        
         <form onSubmit={handleSubmit}>
           {/* 자기소개서 파일 업로드 */}
           <div className="form-group">
@@ -148,7 +153,6 @@ function Self() {
               </div>
             )}
           </div>
-
 
           {/* 질문 이미지 업로드 */}
           <div className="form-group">
@@ -211,7 +215,7 @@ function Self() {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? '처리 중...' : '답변 생성하기'}
           </button>
         </form>
@@ -260,7 +264,9 @@ function Self() {
           </div>
         )}
       </div>
+      </div>{/* 표시 */}
     </Layout>
+    </>
   );
 }
 
