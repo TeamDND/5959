@@ -22,7 +22,7 @@ from services.job_analyzer import JobAnalyzer
 from services.interview_service import InterviewService
 from services.report_generator import ReportGenerator
 from posture_analyzer import PostureAnalyzer
-from TextCleanup import summarize_api, generate_image_api
+from TextCleanup import summarize_api, generate_image_api, analyze_content_api
 from self_app import self_bp
 from network import networking_ai
 
@@ -170,6 +170,11 @@ def analyze_video_route():
 def summarize_route():
     """텍스트/이미지 요약 API 라우트"""
     return summarize_api()
+
+@app.route('/api/analyze-content', methods=['POST'])
+def analyze_content_route():
+    """콘텐츠 분석 API 라우트"""
+    return analyze_content_api()
 
 @app.route('/api/generate-image', methods=['POST'])
 def generate_image_route():

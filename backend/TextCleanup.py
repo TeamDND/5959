@@ -26,6 +26,78 @@ if not os.getenv('OPENAI_API_KEY'):
 else:
     print("✅ OpenAI API 키가 설정되었습니다.")
 
+def call_ai_service(prompt):
+    """AI 서비스 호출 함수"""
+    try:
+        if not client:
+            return "AI 서비스를 사용할 수 없습니다. API 키를 확인해주세요."
+        
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "당신은 전문적인 콘텐츠 분석가입니다. 요청받은 내용을 정확하고 구조화된 형태로 분석해주세요."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            max_tokens=2000,
+            temperature=0.7
+        )
+        
+        return response.choices[0].message.content
+        
+    except Exception as e:
+        print(f"AI 서비스 호출 오류: {str(e)}")
+        return f"AI 서비스 호출 중 오류가 발생했습니다: {str(e)}"
+
+def extract_text_from_image(image_data):
+    """이미지에서 텍스트 추출"""
+    try:
+        if not client:
+            return "OpenAI API 키가 설정되지 않았습니다."
+        
+        # base64 데이터 부분만 추출
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        # OpenAI GPT Vision으로 텍스트 추출
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "이 이미지에서 텍스트를 추출해주세요. 이미지에 텍스트가 있다면 그 텍스트를 그대로 반환하고, 텍스트가 없다면 '텍스트가 없습니다'라고 답변해주세요."
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{image_data}"
+                            }
+                        }
+                    ]
+                }
+            ],
+            max_tokens=1000
+        )
+        
+        extracted_text = response.choices[0].message.content
+        
+        if not extracted_text.strip() or "텍스트가 없습니다" in extracted_text:
+            return ""
+        
+        return extracted_text
+        
+    except Exception as e:
+        print(f"이미지 텍스트 추출 오류: {str(e)}")
+        return ""
+
 def summarize_text_logic(text):
     """텍스트 요약 로직"""
     if len(text) < 50:
@@ -293,3 +365,308 @@ def generate_image_api():
     except Exception as e:
         print(f"이미지 생성 오류: {str(e)}")
         return jsonify({'error': f'이미지 생성 중 오류가 발생했습니다: {str(e)}'}), 500
+
+def analyze_content_api():
+    """콘텐츠 분석 API 엔드포인트 로직"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'error': '요청 데이터가 없습니다.'}), 400
+        
+        content_type = data.get('type', 'text')
+        analysis_type = data.get('analysisType', 'general')
+        
+        if content_type == 'text' and 'text' in data and data['text']:
+            # 텍스트 분석
+            result = analyze_text_logic(data['text'], analysis_type)
+            return jsonify({'summary': result, 'type': 'text'})
+            
+        elif content_type == 'image' and 'image' in data and data['image']:
+            # 이미지 분석
+            result = analyze_image_logic(data['image'], analysis_type)
+            return jsonify({'summary': result, 'type': 'image'})
+            
+        elif content_type == 'link' and 'link' in data and data['link']:
+            # 링크 분석
+            result = analyze_link_logic(data['link'], analysis_type)
+            return jsonify({'summary': result, 'type': 'link'})
+            
+        else:
+            return jsonify({'error': '올바른 콘텐츠 타입과 데이터가 필요합니다.'}), 400
+            
+    except Exception as e:
+        print(f"콘텐츠 분석 오류: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+def analyze_text_logic(text, analysis_type='general'):
+    """텍스트 분석 로직"""
+    try:
+        # 분석 유형에 따른 프롬프트 생성
+        if analysis_type == 'business':
+            prompt = f"""
+다음 텍스트를 비즈니스 관점에서 분석해주세요:
+
+텍스트: {text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "classification": "비즈니스 분류 (예: 기업 소개, 시장 분석, 전략 등)",
+    "main_content": "주요 내용 요약",
+    "key_points": ["핵심 포인트 1", "핵심 포인트 2", "핵심 포인트 3"],
+    "sentiment": "감정 분석 (긍정/부정/중립)",
+    "business_info": "비즈니스 관련 정보",
+    "recommendations": ["추천사항 1", "추천사항 2"]
+}}
+"""
+        elif analysis_type == 'study':
+            prompt = f"""
+다음 텍스트를 학습 관점에서 분석해주세요:
+
+텍스트: {text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "classification": "학습 분류 (예: 개념 설명, 실습 가이드, 이론 등)",
+    "main_content": "주요 내용 요약",
+    "key_points": ["핵심 포인트 1", "핵심 포인트 2", "핵심 포인트 3"],
+    "sentiment": "감정 분석 (긍정/부정/중립)",
+    "study_notes": "학습 노트 형태로 정리",
+    "recommendations": ["학습 추천사항 1", "학습 추천사항 2"]
+}}
+"""
+        elif analysis_type == 'news':
+            prompt = f"""
+다음 텍스트를 뉴스 관점에서 분석해주세요:
+
+텍스트: {text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "classification": "뉴스 분류 (예: 경제, 기술, 사회, 정치 등)",
+    "main_content": "주요 내용 요약",
+    "key_points": ["핵심 포인트 1", "핵심 포인트 2", "핵심 포인트 3"],
+    "sentiment": "감정 분석 (긍정/부정/중립)",
+    "impact_analysis": "영향도 분석",
+    "recommendations": ["관련 추천사항 1", "관련 추천사항 2"]
+}}
+"""
+        else:  # general
+            prompt = f"""
+다음 텍스트를 일반적인 관점에서 분석해주세요:
+
+텍스트: {text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "classification": "내용 분류",
+    "main_content": "주요 내용 요약",
+    "key_points": ["핵심 포인트 1", "핵심 포인트 2", "핵심 포인트 3"],
+    "sentiment": "감정 분석 (긍정/부정/중립)",
+    "recommendations": ["추천사항 1", "추천사항 2"]
+}}
+"""
+        
+        # AI 서비스 호출
+        response = call_ai_service(prompt)
+        
+        # JSON 파싱
+        try:
+            import json
+            result = json.loads(response)
+            return result
+        except json.JSONDecodeError:
+            # JSON 파싱 실패 시 기본 구조로 반환
+            return {
+                "classification": "일반 텍스트",
+                "main_content": response,
+                "key_points": [],
+                "sentiment": "중립",
+                "recommendations": []
+            }
+            
+    except Exception as e:
+        print(f"텍스트 분석 오류: {str(e)}")
+        return {
+            "classification": "분석 오류",
+            "main_content": "텍스트 분석 중 오류가 발생했습니다.",
+            "key_points": [],
+            "sentiment": "중립",
+            "recommendations": []
+        }
+
+def analyze_image_logic(image_data, analysis_type='general'):
+    """이미지 분석 로직"""
+    try:
+        # 이미지에서 텍스트 추출
+        extracted_text = extract_text_from_image(image_data)
+        
+        # 추출된 텍스트로 분석
+        if extracted_text:
+            # 기존 이미지 분석 로직과 유사하지만 더 상세한 분석
+            prompt = f"""
+다음 이미지에서 추출된 텍스트를 {analysis_type} 관점에서 분석해주세요:
+
+추출된 텍스트: {extracted_text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "classification": "내용 분류",
+    "main_content": "주요 내용 요약",
+    "is_study_content": true/false,
+    "study_notes": "학습 노트 (학습 내용인 경우)",
+    "key_points": ["핵심 포인트 1", "핵심 포인트 2"],
+    "sentiment": "감정 분석",
+    "business_info": "비즈니스 정보 (해당하는 경우)"
+}}
+"""
+            
+            response = call_ai_service(prompt)
+            
+            try:
+                import json
+                result = json.loads(response)
+                return result
+            except json.JSONDecodeError:
+                return {
+                    "classification": "이미지 텍스트",
+                    "main_content": extracted_text,
+                    "is_study_content": False,
+                    "study_notes": "",
+                    "key_points": [],
+                    "sentiment": "중립",
+                    "business_info": ""
+                }
+        else:
+            return {
+                "classification": "이미지 (텍스트 없음)",
+                "main_content": "이미지에서 텍스트를 추출할 수 없습니다.",
+                "is_study_content": False,
+                "study_notes": "",
+                "key_points": [],
+                "sentiment": "중립",
+                "business_info": ""
+            }
+            
+    except Exception as e:
+        print(f"이미지 분석 오류: {str(e)}")
+        return {
+            "classification": "분석 오류",
+            "main_content": "이미지 분석 중 오류가 발생했습니다.",
+            "is_study_content": False,
+            "study_notes": "",
+            "key_points": [],
+            "sentiment": "중립",
+            "business_info": ""
+        }
+
+def analyze_link_logic(url, analysis_type='general'):
+    """링크 분석 로직"""
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+        
+        # 웹페이지 내용 가져오기
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # 제목 추출
+        title = soup.find('title')
+        title_text = title.get_text().strip() if title else "제목 없음"
+        
+        # 메타 설명 추출
+        meta_desc = soup.find('meta', attrs={'name': 'description'})
+        description = meta_desc.get('content', '') if meta_desc else ""
+        
+        # 본문 텍스트 추출 (간단한 방법)
+        body = soup.find('body')
+        if body:
+            # 스크립트와 스타일 태그 제거
+            for script in body(["script", "style"]):
+                script.decompose()
+            
+            main_text = body.get_text()
+            # 텍스트 정리
+            lines = (line.strip() for line in main_text.splitlines())
+            chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+            main_text = ' '.join(chunk for chunk in chunks if chunk)
+            
+            # 텍스트 길이 제한
+            if len(main_text) > 2000:
+                main_text = main_text[:2000] + "..."
+        else:
+            main_text = "본문을 추출할 수 없습니다."
+        
+        # 분석 유형에 따른 프롬프트 생성
+        if analysis_type == 'business':
+            prompt = f"""
+다음 웹페이지를 비즈니스 관점에서 분석해주세요:
+
+URL: {url}
+제목: {title_text}
+설명: {description}
+본문: {main_text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "title": "페이지 제목",
+    "description": "페이지 설명",
+    "company_info": "기업 정보",
+    "key_insights": ["핵심 인사이트 1", "핵심 인사이트 2"],
+    "market_analysis": "시장 분석",
+    "recommendations": ["추천사항 1", "추천사항 2"]
+}}
+"""
+        else:  # general
+            prompt = f"""
+다음 웹페이지를 일반적인 관점에서 분석해주세요:
+
+URL: {url}
+제목: {title_text}
+설명: {description}
+본문: {main_text}
+
+다음 형식으로 JSON 응답해주세요:
+{{
+    "title": "페이지 제목",
+    "description": "페이지 설명",
+    "company_info": "기업 정보 (해당하는 경우)",
+    "key_insights": ["핵심 인사이트 1", "핵심 인사이트 2"],
+    "market_analysis": "시장 분석 (해당하는 경우)",
+    "recommendations": ["추천사항 1", "추천사항 2"]
+}}
+"""
+        
+        # AI 서비스 호출
+        response = call_ai_service(prompt)
+        
+        try:
+            import json
+            result = json.loads(response)
+            return result
+        except json.JSONDecodeError:
+            return {
+                "title": title_text,
+                "description": description,
+                "company_info": "",
+                "key_insights": [],
+                "market_analysis": "",
+                "recommendations": []
+            }
+            
+    except Exception as e:
+        print(f"링크 분석 오류: {str(e)}")
+        return {
+            "title": "분석 오류",
+            "description": "링크 분석 중 오류가 발생했습니다.",
+            "company_info": "",
+            "key_insights": [],
+            "market_analysis": "",
+            "recommendations": []
+        }

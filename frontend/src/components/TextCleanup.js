@@ -5,6 +5,7 @@ import '../style/TextCleanup.css';
 function TextCleanup() {
   const [activeTab, setActiveTab] = useState('text');
   const [textInput, setTextInput] = useState('');
+  const [linkInput, setLinkInput] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [result, setResult] = useState(null);
@@ -12,6 +13,7 @@ function TextCleanup() {
   const [error, setError] = useState('');
   const [generatedImage, setGeneratedImage] = useState(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [analysisType, setAnalysisType] = useState('general'); // general, business, study, news
   
   const fileInputRef = useRef(null);
 
@@ -51,15 +53,19 @@ function TextCleanup() {
     }
   };
 
-  const summarizeText = async () => {
+  const analyzeText = async () => {
     if (!textInput.trim()) {
       alert('텍스트를 입력해주세요.');
       return;
     }
-    await sendRequest({ text: textInput });
+    await sendRequest({ 
+      text: textInput, 
+      type: 'text',
+      analysisType: analysisType 
+    });
   };
 
-  const summarizeImage = async () => {
+  const analyzeImage = async () => {
     if (!selectedImage) {
       alert('이미지를 선택해주세요.');
       return;
@@ -67,9 +73,34 @@ function TextCleanup() {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      sendRequest({ image: e.target.result });
+      sendRequest({ 
+        image: e.target.result, 
+        type: 'image',
+        analysisType: analysisType 
+      });
     };
     reader.readAsDataURL(selectedImage);
+  };
+
+  const analyzeLink = async () => {
+    if (!linkInput.trim()) {
+      alert('링크를 입력해주세요.');
+      return;
+    }
+    
+    // URL 유효성 검사
+    try {
+      new URL(linkInput);
+    } catch {
+      alert('올바른 URL을 입력해주세요.');
+      return;
+    }
+    
+    await sendRequest({ 
+      link: linkInput, 
+      type: 'link',
+      analysisType: analysisType 
+    });
   };
 
   const generateImage = async () => {
@@ -129,7 +160,7 @@ function TextCleanup() {
     setResult(null);
 
     try {
-      const response = await fetch('/api/summarize', {
+      const response = await fetch('/api/analyze-content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -140,13 +171,11 @@ function TextCleanup() {
       const result = await response.json();
       
       console.log('서버 응답:', result);
-      console.log('응답 타입:', typeof result.summary);
-      console.log('summary 내용:', result.summary);
 
       if (response.ok) {
         setResult(result);
       } else {
-        setError(result.error || '요약 중 오류가 발생했습니다.');
+        setError(result.error || '분석 중 오류가 발생했습니다.');
       }
     } catch (error) {
       setError('네트워크 오류가 발생했습니다.');
@@ -163,25 +192,68 @@ function TextCleanup() {
       const mainContent = result.summary.main_content || '';
       const isStudyContent = result.summary.is_study_content || false;
       const studyNotes = result.summary.study_notes || '';
+      const businessInfo = result.summary.business_info || '';
+      const keyPoints = result.summary.key_points || [];
+      const sentiment = result.summary.sentiment || '';
       
       return (
         <div className="result">
-          <h3>📋 요약 결과</h3>
+          <h3>📋 분석 결과</h3>
+          
+          {/* 분류 정보 */}
           <div className="result-section">
-            <h4 className="result-section-title">📊 분류 정보</h4>
+            <h4 className="result-section-title">📊 내용 분류</h4>
             <div className="result-section-content classification">
               {classification}
             </div>
           </div>
+
+          {/* 감정 분석 */}
+          {sentiment && (
+            <div className="result-section">
+              <h4 className="result-section-title">😊 감정 분석</h4>
+              <div className="result-section-content sentiment">
+                {sentiment}
+              </div>
+            </div>
+          )}
+
+          {/* 주요 내용 */}
           <div className="result-section">
             <h4 className="result-section-title">📋 주요 내용</h4>
             <div className="result-section-content main-content">
               {mainContent}
             </div>
           </div>
+
+          {/* 핵심 포인트 */}
+          {keyPoints && keyPoints.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">🎯 핵심 포인트</h4>
+              <div className="result-section-content key-points">
+                <ul>
+                  {keyPoints.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* 비즈니스 정보 */}
+          {businessInfo && (
+            <div className="result-section">
+              <h4 className="result-section-title">🏢 비즈니스 정보</h4>
+              <div className="result-section-content business-info">
+                {businessInfo}
+              </div>
+            </div>
+          )}
+
+          {/* 공부 내용 정리 */}
           {isStudyContent && studyNotes && (
             <div className="result-section">
-              <h4 className="result-section-title">📚 공부 내용 정리</h4>
+              <h4 className="result-section-title">📚 학습 노트</h4>
               <div className="result-section-content study-content">
                 {studyNotes}
               </div>
@@ -196,10 +268,10 @@ function TextCleanup() {
                 onClick={generateImage}
                 disabled={isGeneratingImage}
               >
-                {isGeneratingImage ? '🖼️ 이미지 생성 중...' : '🖼️ 요약 내용을 이미지로 변환'}
+                {isGeneratingImage ? '🖼️ 이미지 생성 중...' : '🖼️ 학습 노트를 이미지로 변환'}
               </button>
               <div className="image-generation-info">
-                💡 공부 내용을 시각적 학습 자료로 변환합니다
+                💡 학습 내용을 시각적 자료로 변환합니다
               </div>
             </div>
           )}
@@ -207,7 +279,7 @@ function TextCleanup() {
           {/* 생성된 이미지 표시 */}
           {isGeneratingImage && (
             <div className="generating-message">
-              <p>AI가 공부 내용을 이미지로 변환하고 있습니다...</p>
+              <p>AI가 학습 노트를 이미지로 변환하고 있습니다...</p>
             </div>
           )}
 
@@ -238,19 +310,168 @@ function TextCleanup() {
           )}
         </div>
       );
-    } else if (result.type === 'text') {
+    } else if (result.type === 'text' && typeof result.summary === 'object') {
+      const classification = result.summary.classification || '';
+      const mainContent = result.summary.main_content || '';
+      const keyPoints = result.summary.key_points || [];
+      const sentiment = result.summary.sentiment || '';
+      const businessInfo = result.summary.business_info || '';
+      const recommendations = result.summary.recommendations || [];
+      
       return (
         <div className="result">
-          <h3>📋 요약 결과</h3>
-          <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px' }}>
-            {result.summary}
+          <h3>📋 텍스트 분석 결과</h3>
+          
+          {/* 분류 정보 */}
+          <div className="result-section">
+            <h4 className="result-section-title">📊 내용 분류</h4>
+            <div className="result-section-content classification">
+              {classification}
+            </div>
           </div>
+
+          {/* 감정 분석 */}
+          {sentiment && (
+            <div className="result-section">
+              <h4 className="result-section-title">😊 감정 분석</h4>
+              <div className="result-section-content sentiment">
+                {sentiment}
+              </div>
+            </div>
+          )}
+
+          {/* 주요 내용 */}
+          <div className="result-section">
+            <h4 className="result-section-title">📋 주요 내용</h4>
+            <div className="result-section-content main-content">
+              {mainContent}
+            </div>
+          </div>
+
+          {/* 핵심 포인트 */}
+          {keyPoints && keyPoints.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">🎯 핵심 포인트</h4>
+              <div className="result-section-content key-points">
+                <ul>
+                  {keyPoints.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* 비즈니스 정보 */}
+          {businessInfo && (
+            <div className="result-section">
+              <h4 className="result-section-title">🏢 비즈니스 정보</h4>
+              <div className="result-section-content business-info">
+                {businessInfo}
+              </div>
+            </div>
+          )}
+
+          {/* 추천사항 */}
+          {recommendations && recommendations.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">💡 추천사항</h4>
+              <div className="result-section-content recommendations">
+                <ul>
+                  {recommendations.map((rec, index) => (
+                    <li key={index}>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    } else if (result.type === 'link' && typeof result.summary === 'object') {
+      const title = result.summary.title || '';
+      const description = result.summary.description || '';
+      const companyInfo = result.summary.company_info || '';
+      const keyInsights = result.summary.key_insights || [];
+      const marketAnalysis = result.summary.market_analysis || '';
+      const recommendations = result.summary.recommendations || [];
+      
+      return (
+        <div className="result">
+          <h3>🔗 링크 분석 결과</h3>
+          
+          {/* 제목 */}
+          {title && (
+            <div className="result-section">
+              <h4 className="result-section-title">📰 제목</h4>
+              <div className="result-section-content title">
+                {title}
+              </div>
+            </div>
+          )}
+
+          {/* 설명 */}
+          {description && (
+            <div className="result-section">
+              <h4 className="result-section-title">📝 설명</h4>
+              <div className="result-section-content description">
+                {description}
+              </div>
+            </div>
+          )}
+
+          {/* 기업 정보 */}
+          {companyInfo && (
+            <div className="result-section">
+              <h4 className="result-section-title">🏢 기업 정보</h4>
+              <div className="result-section-content company-info">
+                {companyInfo}
+              </div>
+            </div>
+          )}
+
+          {/* 핵심 인사이트 */}
+          {keyInsights && keyInsights.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">💡 핵심 인사이트</h4>
+              <div className="result-section-content key-insights">
+                <ul>
+                  {keyInsights.map((insight, index) => (
+                    <li key={index}>{insight}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* 시장 분석 */}
+          {marketAnalysis && (
+            <div className="result-section">
+              <h4 className="result-section-title">📊 시장 분석</h4>
+              <div className="result-section-content market-analysis">
+                {marketAnalysis}
+              </div>
+            </div>
+          )}
+
+          {/* 추천사항 */}
+          {recommendations && recommendations.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">🎯 추천사항</h4>
+              <div className="result-section-content recommendations">
+                <ul>
+                  {recommendations.map((rec, index) => (
+                    <li key={index}>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       );
     } else {
       return (
         <div className="result">
-          <h3>📋 요약 결과</h3>
+          <h3>📋 분석 결과</h3>
           <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', whiteSpace: 'pre-line' }}>
             <pre style={{ margin: 0, fontFamily: 'inherit', fontSize: '14px' }}>
               {JSON.stringify(result, null, 2)}
@@ -264,97 +485,161 @@ function TextCleanup() {
   return (
     <Layout>
       <div className="container">
-        <div className="header">
-          <h1>🤖 AI 요약 도구</h1>
+        <div className="title">
+          <h2>🤖 AI 콘텐츠 분석 도구</h2>
+          <p>텍스트, 이미지, 링크를 분석하여 분류하고 요약해드립니다</p>
         </div>
 
-      <div className="content-wrapper">
-        <div className="tabs">
-          <button 
-            className={`tab ${activeTab === 'text' ? 'active' : ''}`}
-            onClick={() => switchTab('text')}
-          >
-            📝 텍스트 요약
-          </button>
-          <button 
-            className={`tab ${activeTab === 'image' ? 'active' : ''}`}
-            onClick={() => switchTab('image')}
-          >
-            🖼️ 이미지 요약
-          </button>
-        </div>
-
-        {activeTab === 'text' && (
-          <div className="content active">
-            <div className="input-group">
-              <label htmlFor="text-input">요약할 텍스트를 입력하세요:</label>
-              <textarea 
-                id="text-input"
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-                placeholder="여기에 텍스트를 입력하세요..."
-              />
-            </div>
-            <button 
-              className="submit-btn"
-              onClick={summarizeText}
-              disabled={isLoading}
-            >
-              {isLoading ? '요약 중...' : '요약하기'}
-            </button>
-          </div>
-        )}
-
-        {activeTab === 'image' && (
-          <div className="content active">
-            <div className="input-group">
-              <label htmlFor="image-input">요약할 이미지를 선택하세요:</label>
-              <input 
-                type="file" 
-                id="image-input" 
-                className="file-input" 
-                accept="image/*" 
-                onChange={handleImageSelect}
-                ref={fileInputRef}
-              />
-              <label 
-                htmlFor="image-input" 
-                className="file-label"
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
+        <div className="content-wrapper">
+          {/* 분석 유형 선택 */}
+          <div className="analysis-type-selector">
+            <h3>📊 분석 유형 선택</h3>
+            <div className="analysis-type-buttons">
+              <button 
+                className={`analysis-type-btn ${analysisType === 'general' ? 'active' : ''}`}
+                onClick={() => setAnalysisType('general')}
               >
-                📁 이미지 파일을 선택하거나 여기에 드래그하세요
-              </label>
-              {imagePreview && (
-                <img src={imagePreview} alt="미리보기" className="preview-image" />
-              )}
+                🔍 일반 분석
+              </button>
+              <button 
+                className={`analysis-type-btn ${analysisType === 'business' ? 'active' : ''}`}
+                onClick={() => setAnalysisType('business')}
+              >
+                🏢 비즈니스 분석
+              </button>
+              <button 
+                className={`analysis-type-btn ${analysisType === 'study' ? 'active' : ''}`}
+                onClick={() => setAnalysisType('study')}
+              >
+                📚 학습 분석
+              </button>
+              <button 
+                className={`analysis-type-btn ${analysisType === 'news' ? 'active' : ''}`}
+                onClick={() => setAnalysisType('news')}
+              >
+                📰 뉴스 분석
+              </button>
             </div>
+          </div>
+
+          <div className="tabs">
             <button 
-              className="submit-btn"
-              onClick={summarizeImage}
-              disabled={isLoading}
+              className={`tab ${activeTab === 'text' ? 'active' : ''}`}
+              onClick={() => switchTab('text')}
             >
-              {isLoading ? '요약 중...' : '요약하기'}
+              📝 텍스트 분석
+            </button>
+            <button 
+              className={`tab ${activeTab === 'image' ? 'active' : ''}`}
+              onClick={() => switchTab('image')}
+            >
+              🖼️ 이미지 분석
+            </button>
+            <button 
+              className={`tab ${activeTab === 'link' ? 'active' : ''}`}
+              onClick={() => switchTab('link')}
+            >
+              🔗 링크 분석
             </button>
           </div>
-        )}
 
-        {isLoading && (
-          <div className="result loading">
-            <h3>📋 요약 결과</h3>
-            <p>AI가 요약을 생성하고 있습니다...</p>
-          </div>
-        )}
+          {activeTab === 'text' && (
+            <div className="content active">
+              <div className="input-group">
+                <label htmlFor="text-input">분석할 텍스트를 입력하세요:</label>
+                <textarea 
+                  id="text-input"
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                  placeholder="여기에 텍스트를 입력하세요..."
+                />
+              </div>
+              <button 
+                className="submit-btn"
+                onClick={analyzeText}
+                disabled={isLoading}
+              >
+                {isLoading ? '분석 중...' : '분석하기'}
+              </button>
+            </div>
+          )}
 
-        {error && (
-          <div className="result error">
-            <h3>📋 요약 결과</h3>
-            <p>{error}</p>
-          </div>
-        )}
+          {activeTab === 'image' && (
+            <div className="content active">
+              <div className="input-group">
+                <label htmlFor="image-input">분석할 이미지를 선택하세요:</label>
+                <input 
+                  type="file" 
+                  id="image-input" 
+                  className="file-input" 
+                  accept="image/*" 
+                  onChange={handleImageSelect}
+                  ref={fileInputRef}
+                />
+                <label 
+                  htmlFor="image-input" 
+                  className="file-label"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
+                  📁 이미지 파일을 선택하거나 여기에 드래그하세요
+                </label>
+                {imagePreview && (
+                  <img src={imagePreview} alt="미리보기" className="preview-image" />
+                )}
+              </div>
+              <button 
+                className="submit-btn"
+                onClick={analyzeImage}
+                disabled={isLoading}
+              >
+                {isLoading ? '분석 중...' : '분석하기'}
+              </button>
+            </div>
+          )}
 
-        {renderResult()}
-      </div>
+          {activeTab === 'link' && (
+            <div className="content active">
+              <div className="input-group">
+                <label htmlFor="link-input">분석할 링크를 입력하세요:</label>
+                <input 
+                  type="url" 
+                  id="link-input"
+                  value={linkInput}
+                  onChange={(e) => setLinkInput(e.target.value)}
+                  placeholder="https://example.com"
+                  className="link-input"
+                />
+                <div className="link-examples">
+                  <p>💡 예시: 기업 홈페이지, 뉴스 기사, 블로그 포스트 등</p>
+                </div>
+              </div>
+              <button 
+                className="submit-btn"
+                onClick={analyzeLink}
+                disabled={isLoading}
+              >
+                {isLoading ? '분석 중...' : '분석하기'}
+              </button>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="result loading">
+              <h3>📋 분석 결과</h3>
+              <p>AI가 콘텐츠를 분석하고 있습니다...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="result error">
+              <h3>📋 분석 결과</h3>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {renderResult()}
+        </div>
       </div>
     </Layout>
   );
