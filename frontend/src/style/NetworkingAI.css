@@ -104,7 +104,7 @@
   font-family: 'Noto Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
-  color: #005793;
+  color: #444;
   margin-bottom: 10px;
 }
 
@@ -270,7 +270,7 @@
 .guide-header h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #005793;
+  color: #444;
   margin: 0;
 }
 
