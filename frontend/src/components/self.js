@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import '../style/App.css';
-import { Layout } from 'lucide-react';
+import Layout from './Layout.js';
 
 function Self() {
   const [resumeFile, setResumeFile] = useState(null);
@@ -119,8 +119,7 @@ function Self() {
     }
   };
   return (
-    <div className="App">
-      
+    <Layout>
       <div className="container">
         <h1>AI 자소서 답변 생성기</h1>
         
@@ -261,8 +260,7 @@ function Self() {
           </div>
         )}
       </div>
-      
-    </div>
+    </Layout>
   );
 }
 
