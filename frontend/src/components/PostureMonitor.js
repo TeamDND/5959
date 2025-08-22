@@ -655,11 +655,12 @@ function PostureMonitor() {
     };
 
     return (
+        <Layout>
         <div className="posture-monitor">
-            <Layout>
                 <div className="posture-wrapper">
                     <div className="title">
-                        <h2>AI 자세 분석 도구</h2>
+                        <h2>💡 AI 자세 분석 도구</h2>
+                        <p>기본 자세를 기준으로 실시간 자세 이탈을 감지하여 알려줍니다</p>
                     </div>
                     <div className="container">
 
@@ -913,7 +914,7 @@ function PostureMonitor() {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            
 
             {/* 🎨 커스텀 미니 알림창 */}
             {miniAlert.isVisible && (
@@ -959,6 +960,7 @@ function PostureMonitor() {
                 </div>
             )}
         </div>
+        </Layout>
     );
 }
 
