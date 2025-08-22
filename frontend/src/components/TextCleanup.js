@@ -104,13 +104,28 @@ function TextCleanup() {
   };
 
   const generateImage = async () => {
-    if (!result || result.type !== 'image') {
-      alert('이미지 분석 결과가 없습니다.');
+    // JSON 문자열인 경우 파싱 시도
+    let parsedResult = result;
+    if (typeof result === 'string') {
+      try {
+        parsedResult = JSON.parse(result);
+      } catch (e) {
+        console.error('JSON 파싱 실패:', e);
+      }
+    }
+
+    if (!parsedResult || (parsedResult.type !== 'image' && parsedResult.type !== 'text')) {
+      alert('이미지 또는 텍스트 분석 결과가 없습니다.');
       return;
     }
 
     // 공부 내용으로 분류된 경우에만 이미지 생성
-    if (!result.summary.is_study_content) {
+    const classification = parsedResult.summary.classification || '';
+    if (!parsedResult.summary.is_study_content && 
+        !classification.includes('학습') && 
+        !classification.includes('공부') && 
+        !classification.includes('교육') && 
+        !classification.includes('텍스트')) {
       alert('공부 내용으로 분류된 경우에만 이미지 생성이 가능합니다.');
       return;
     }
@@ -120,12 +135,37 @@ function TextCleanup() {
     setError('');
 
     try {
-      // 공부 내용 정리 전체를 이미지 생성용 텍스트로 변환
-      const studyNotes = result.summary.study_notes || '';
+      // 공부 내용 정리 또는 주요 내용을 이미지 생성용 텍스트로 변환
+      const studyNotes = parsedResult.summary.study_notes || '';
+      const mainContent = parsedResult.summary.main_content || '';
+      const contentForImage = studyNotes || mainContent || '분석된 내용을 이미지로 변환합니다.';
       
-      // 공부 내용 정리가 없으면 이미지 생성 불가
-      if (!studyNotes) {
-        setError('공부 내용 정리가 없어 이미지를 생성할 수 없습니다.');
+      // 생성할 내용이 없거나 추출 실패 메시지인 경우 기본 내용 사용
+      if (!contentForImage || contentForImage.includes('추출할 수 없습니다') || contentForImage.includes('추출해 드릴 수 없습니다')) {
+        const defaultContent = `이미지 분석 결과:
+- 분류: ${classification}
+- 감정: ${parsedResult.summary.sentiment || '중립'}
+- 상태: 텍스트 추출이 어려운 이미지
+- 제안: 이미지 해상도를 높이거나 텍스트가 더 명확한 이미지를 사용해보세요.`;
+        
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            content: defaultContent,
+            originalImage: parsedResult.type === 'image' ? imagePreview : null
+          })
+        });
+
+        const imageResult = await response.json();
+        
+        if (response.ok && imageResult.image) {
+          setGeneratedImage(imageResult.image);
+        } else {
+          setError(imageResult.error || '이미지 생성 중 오류가 발생했습니다.');
+        }
         return;
       }
 
@@ -135,8 +175,8 @@ function TextCleanup() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          content: studyNotes,
-          originalImage: imagePreview 
+          content: contentForImage,
+          originalImage: parsedResult.type === 'image' ? imagePreview : null
         })
       });
 
@@ -187,14 +227,32 @@ function TextCleanup() {
   const renderResult = () => {
     if (!result) return null;
 
-    if (result.type === 'image' && typeof result.summary === 'object') {
-      const classification = result.summary.classification || '';
-      const mainContent = result.summary.main_content || '';
-      const isStudyContent = result.summary.is_study_content || false;
-      const studyNotes = result.summary.study_notes || '';
-      const businessInfo = result.summary.business_info || '';
-      const keyPoints = result.summary.key_points || [];
-      const sentiment = result.summary.sentiment || '';
+    // JSON 문자열인 경우 파싱 시도
+    let parsedResult = result;
+    if (typeof result === 'string') {
+      try {
+        parsedResult = JSON.parse(result);
+      } catch (e) {
+        console.error('JSON 파싱 실패:', e);
+      }
+    }
+
+    // 텍스트 분석 결과가 직접 포함된 경우 (summary 없이)
+    if (parsedResult.classification || parsedResult.main_content) {
+      parsedResult = {
+        type: 'text',
+        summary: parsedResult
+      };
+    }
+
+    if (parsedResult.type === 'image' && typeof parsedResult.summary === 'object') {
+      const classification = parsedResult.summary.classification || '';
+      const mainContent = parsedResult.summary.main_content || '';
+      const isStudyContent = parsedResult.summary.is_study_content || false;
+      const studyNotes = parsedResult.summary.study_notes || '';
+      const businessInfo = parsedResult.summary.business_info || '';
+      const keyPoints = parsedResult.summary.key_points || [];
+      const sentiment = parsedResult.summary.sentiment || '';
       
       return (
         <div className="result">
@@ -261,7 +319,7 @@ function TextCleanup() {
           )}
           
           {/* 공부 내용으로 분류된 경우에만 이미지 생성 버튼 표시 */}
-          {isStudyContent && (
+          {(isStudyContent || classification.includes('학습') || classification.includes('공부') || classification.includes('교육') || classification.includes('텍스트')) && (
             <div className="image-generation-section">
               <button 
                 className="submit-btn image-generation-btn"
@@ -310,13 +368,15 @@ function TextCleanup() {
           )}
         </div>
       );
-    } else if (result.type === 'text' && typeof result.summary === 'object') {
-      const classification = result.summary.classification || '';
-      const mainContent = result.summary.main_content || '';
-      const keyPoints = result.summary.key_points || [];
-      const sentiment = result.summary.sentiment || '';
-      const businessInfo = result.summary.business_info || '';
-      const recommendations = result.summary.recommendations || [];
+    } else if (parsedResult.type === 'text' && typeof parsedResult.summary === 'object') {
+      const classification = parsedResult.summary.classification || '';
+      const mainContent = parsedResult.summary.main_content || '';
+      const keyPoints = parsedResult.summary.key_points || [];
+      const sentiment = parsedResult.summary.sentiment || '';
+      const businessInfo = parsedResult.summary.business_info || '';
+      const recommendations = parsedResult.summary.recommendations || [];
+      const isStudyContent = parsedResult.summary.is_study_content || false;
+      const studyNotes = parsedResult.summary.study_notes || '';
       
       return (
         <div className="result">
@@ -385,15 +445,74 @@ function TextCleanup() {
               </div>
             </div>
           )}
+
+          {/* 공부 내용 정리 */}
+          {isStudyContent && studyNotes && (
+            <div className="result-section">
+              <h4 className="result-section-title">📚 학습 노트</h4>
+              <div className="result-section-content study-content">
+                {studyNotes}
+              </div>
+            </div>
+          )}
+          
+          {/* 공부 내용으로 분류된 경우에만 이미지 생성 버튼 표시 */}
+          {(isStudyContent || classification.includes('학습') || classification.includes('공부') || classification.includes('교육') || classification.includes('텍스트')) && (
+            <div className="image-generation-section">
+              <button 
+                className="submit-btn image-generation-btn"
+                onClick={generateImage}
+                disabled={isGeneratingImage}
+              >
+                {isGeneratingImage ? '🖼️ 이미지 생성 중...' : '🖼️ 학습 노트를 이미지로 변환'}
+              </button>
+              <div className="image-generation-info">
+                💡 학습 내용을 시각적 자료로 변환합니다
+              </div>
+            </div>
+          )}
+
+          {/* 생성된 이미지 표시 */}
+          {isGeneratingImage && (
+            <div className="generating-message">
+              <p>AI가 학습 노트를 이미지로 변환하고 있습니다...</p>
+            </div>
+          )}
+
+          {generatedImage && (
+            <div className="generated-image-section">
+              <h4 className="generated-image-title">🎨 생성된 학습 노트</h4>
+              <div className="generated-image-container">
+                <iframe 
+                  src={generatedImage} 
+                  className="generated-image-frame"
+                  title="학습 노트"
+                />
+                <div className="download-button-container">
+                  <button 
+                    className="submit-btn download-btn"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = generatedImage;
+                      link.download = '학습노트.html';
+                      link.click();
+                    }}
+                  >
+                    💾 학습 노트 다운로드 (HTML)
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
-    } else if (result.type === 'link' && typeof result.summary === 'object') {
-      const title = result.summary.title || '';
-      const description = result.summary.description || '';
-      const companyInfo = result.summary.company_info || '';
-      const keyInsights = result.summary.key_insights || [];
-      const marketAnalysis = result.summary.market_analysis || '';
-      const recommendations = result.summary.recommendations || [];
+    } else if (parsedResult.type === 'link' && typeof parsedResult.summary === 'object') {
+      const title = parsedResult.summary.title || '';
+      const description = parsedResult.summary.description || '';
+      const companyInfo = parsedResult.summary.company_info || '';
+      const keyInsights = parsedResult.summary.key_insights || [];
+      const marketAnalysis = parsedResult.summary.market_analysis || '';
+      const recommendations = parsedResult.summary.recommendations || [];
       
       return (
         <div className="result">
@@ -474,7 +593,7 @@ function TextCleanup() {
           <h3>📋 분석 결과</h3>
           <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', whiteSpace: 'pre-line' }}>
             <pre style={{ margin: 0, fontFamily: 'inherit', fontSize: '14px' }}>
-              {JSON.stringify(result, null, 2)}
+              {JSON.stringify(parsedResult, null, 2)}
             </pre>
           </div>
         </div>

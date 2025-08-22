@@ -44,7 +44,7 @@ def call_ai_service(prompt):
                     "content": prompt
                 }
             ],
-            max_tokens=2000,
+            max_tokens=4000,
             temperature=0.7
         )
         
@@ -73,7 +73,7 @@ def extract_text_from_image(image_data):
                     "content": [
                         {
                             "type": "text",
-                            "text": "이 이미지에서 텍스트를 추출해주세요. 이미지에 텍스트가 있다면 그 텍스트를 그대로 반환하고, 텍스트가 없다면 '텍스트가 없습니다'라고 답변해주세요."
+                            "text": "이 이미지에서 모든 텍스트를 정확히 추출해주세요. 이미지에 있는 모든 글자, 숫자, 기호, 표, 그래프의 텍스트를 포함하여 모든 텍스트를 그대로 반환해주세요. 텍스트가 여러 줄이나 여러 섹션에 있다면 구조를 유지하여 추출해주세요. 길이 제한 없이 모든 텍스트를 추출해주세요. 이미지에 텍스트가 전혀 없다면 '텍스트가 없습니다'라고 답변해주세요."
                         },
                         {
                             "type": "image_url",
@@ -84,19 +84,27 @@ def extract_text_from_image(image_data):
                     ]
                 }
             ],
-            max_tokens=1000
+            max_tokens=4000
         )
         
         extracted_text = response.choices[0].message.content
         
-        if not extracted_text.strip() or "텍스트가 없습니다" in extracted_text:
-            return ""
+        # 디버깅을 위한 로그
+        print(f"=== 텍스트 추출 결과 ===")
+        print(f"추출된 텍스트: {extracted_text}")
+        print(f"=======================")
         
+        # 텍스트가 없거나 "텍스트가 없습니다"라는 메시지인 경우
+        if not extracted_text.strip() or "텍스트가 없습니다" in extracted_text:
+            print("텍스트 추출 실패 - None 반환")
+            return None  # None을 반환하여 실패를 명확히 표시
+        
+        print("텍스트 추출 성공")
         return extracted_text
         
     except Exception as e:
         print(f"이미지 텍스트 추출 오류: {str(e)}")
-        return ""
+        return None
 
 def summarize_text_logic(text):
     """텍스트 요약 로직"""
@@ -139,7 +147,7 @@ def summarize_image_logic(image_data):
                     "content": [
                         {
                             "type": "text",
-                            "text": "이 이미지를 분석하고 다음 형식으로 답변해주세요:\n\n📊 **내용 분류**: [다음 중 하나 선택]\n- 📚 공부/학습 내용 (수업 노트, 교재, 문제집, 개념 정리 등)\n- 📰 뉴스/기사 내용 (신문, 잡지, 온라인 기사 등)\n- 📄 문서/서류 (공문서, 계약서, 보고서 등)\n- 💼 업무/회사 내용 (회의록, 업무 자료 등)\n- 🏠 개인/일상 내용 (일기, 메모, 개인 기록 등)\n- ❓ 기타/분류 불가\n\n🔍 **분류 근거**: [왜 이 분류를 선택했는지 설명]\n\n📋 **주요 내용**: [핵심 내용 요약]\n\n📚 **공부 내용 정리** (공부/학습 내용으로 분류된 경우에만 반드시 작성):\n- 🎯 핵심 개념: [이미지에서 발견된 중요한 개념, 용어, 인물, 사건 등을 나열]\n- 📝 요약 노트: [이미지의 내용을 이해하기 쉽게 체계적으로 정리]\n- ❓ 질문/확인사항: [이 내용과 관련해서 더 알아보면 좋을 질문이나 확인이 필요한 부분]\n- 🔗 관련 주제: [이 내용과 연관된 다른 학습 주제나 배경 지식]\n\n⚠️ 매우 중요: 공부/학습 내용으로 분류했다면 반드시 위의 4가지 항목을 모두 구체적으로 작성해주세요. 빈 항목으로 두지 마세요! 각 항목에 실제 내용을 반드시 포함해주세요!"
+                            "text": "이 이미지를 분석하고 다음 형식으로 답변해주세요:\n\n📊 **내용 분류**: [다음 중 하나 선택]\n- 📚 공부/학습 내용 (수업 노트, 교재, 문제집, 개념 정리 등)\n- 📰 뉴스/기사 내용 (신문, 잡지, 온라인 기사 등)\n- 📄 문서/서류 (공문서, 계약서, 보고서 등)\n- 💼 업무/회사 내용 (회의록, 업무 자료 등)\n- 🏠 개인/일상 내용 (일기, 메모, 개인 기록 등)\n- ❓ 기타/분류 불가\n\n🔍 **분류 근거**: [왜 이 분류를 선택했는지 설명]\n\n📋 **주요 내용**: [핵심 내용 요약 - 이미지에 있는 모든 텍스트를 포함하여 상세하게 설명]\n\n📚 **공부 내용 정리** (공부/학습 내용으로 분류된 경우에만 반드시 작성):\n- 🎯 핵심 개념: [이미지에서 발견된 중요한 개념, 용어, 인물, 사건 등을 나열]\n- 📝 요약 노트: [이미지의 내용을 이해하기 쉽게 체계적으로 정리]\n- ❓ 질문/확인사항: [이 내용과 관련해서 더 알아보면 좋을 질문이나 확인이 필요한 부분]\n- 🔗 관련 주제: [이 내용과 연관된 다른 학습 주제나 배경 지식]\n\n⚠️ 매우 중요: 공부/학습 내용으로 분류했다면 반드시 위의 4가지 항목을 모두 구체적으로 작성해주세요. 빈 항목으로 두지 마세요! 각 항목에 실제 내용을 반드시 포함해주세요!"
                         },
                         {
                             "type": "image_url",
@@ -150,7 +158,7 @@ def summarize_image_logic(image_data):
                     ]
                 }
             ],
-            max_tokens=2000
+            max_tokens=4000
         )
         extracted_text = response.choices[0].message.content
         
@@ -169,33 +177,64 @@ def summarize_image_logic(image_data):
         study_notes = ""
         is_study_content = False
         in_study_notes = False
+        in_main_content = False
         
         for line in lines:
-            if line.startswith('📊 **내용 분류**') or line.startswith('🔍 **분류 근거**'):
+            line_stripped = line.strip()
+            
+            if line.startswith('📊 **내용 분류**') or '📊' in line and '내용 분류' in line:
                 classification_info += line + '\n'
                 # 공부/학습 내용인지 확인
-                if '📚 공부/학습 내용' in line:
+                if '📚 공부/학습 내용' in line or '공부' in line or '학습' in line:
                     is_study_content = True
-            elif line.startswith('📋 **주요 내용**'):
-                main_content = line.replace('📋 **주요 내용**: ', '')
-            elif line.startswith('📚 **공부 내용 정리**'):
+            elif line.startswith('🔍 **분류 근거**') or '🔍' in line and '분류 근거' in line:
+                classification_info += line + '\n'
+            elif line.startswith('📋 **주요 내용**') or '📋' in line and '주요 내용' in line:
+                # 주요 내용 섹션 시작
+                in_main_content = True
+                main_content_line = line.replace('📋 **주요 내용**: ', '').replace('📋 **주요 내용**:', '').replace('📋', '').replace('**주요 내용**', '').replace(':', '').strip()
+                if main_content_line:
+                    main_content += main_content_line + ' '
+            elif in_main_content and not line.startswith('📚') and not line.startswith('📊') and not line.startswith('🔍') and line_stripped:
+                # 주요 내용 섹션 내의 텍스트
+                main_content += line_stripped + ' '
+            elif line.startswith('📚 **공부 내용 정리**') or '📚' in line and '공부 내용 정리' in line:
                 in_study_notes = True
+                in_main_content = False
                 study_notes += line + '\n'
-            elif in_study_notes and (line.startswith('- 🎯 핵심 개념') or line.startswith('- 📝 요약 노트') or line.startswith('- ❓ 질문/확인사항') or line.startswith('- 🔗 관련 주제') or line.strip().startswith('-') or line.strip()):
+                is_study_content = True  # 공부 내용 정리가 있으면 학습 내용으로 판단
+            elif in_study_notes and (line.startswith('- 🎯') or line.startswith('- 📝') or line.startswith('- ❓') or line.startswith('- 🔗') or line_stripped.startswith('-') or line_stripped):
                 study_notes += line + '\n'
-            elif in_study_notes and line.strip() == '':
+            elif in_study_notes and line_stripped == '':
                 study_notes += line + '\n'
             elif in_study_notes and not line.startswith('📊') and not line.startswith('🔍') and not line.startswith('📋'):
                 # 공부 내용 정리 섹션 내의 일반 텍스트도 포함
                 study_notes += line + '\n'
         
+        # main_content가 비어있는 경우 전체 텍스트를 사용
+        if not main_content.strip():
+            # 공부 내용 정리가 있으면 그것을 main_content로 사용
+            if study_notes.strip():
+                main_content = "이미지에서 학습 내용을 추출했습니다. 상세 내용은 아래 학습 노트를 참조하세요."
+                is_study_content = True
+            else:
+                # 그것도 없으면 전체 텍스트를 요약해서 사용
+                main_content = extracted_text[:300] + ('...' if len(extracted_text) > 300 else '')
+        
         # 결과 구성
         result = {
-            'classification': classification_info.strip(),
+            'classification': classification_info.strip() if classification_info.strip() else '이미지 텍스트',
             'main_content': main_content.strip(),
             'is_study_content': is_study_content,
             'study_notes': study_notes.strip() if is_study_content else ""
         }
+        
+        print(f"=== 파싱 결과 ===")
+        print(f"classification: {result['classification']}")
+        print(f"main_content: {result['main_content'][:100]}...")
+        print(f"is_study_content: {result['is_study_content']}")
+        print(f"study_notes length: {len(result['study_notes'])}")
+        print("==================")
         
         return result
         
@@ -498,55 +537,33 @@ def analyze_text_logic(text, analysis_type='general'):
 def analyze_image_logic(image_data, analysis_type='general'):
     """이미지 분석 로직"""
     try:
-        # 이미지에서 텍스트 추출
-        extracted_text = extract_text_from_image(image_data)
+        print("=== 이미지 분석 시작 ===")
         
-        # 추출된 텍스트로 분석
-        if extracted_text:
-            # 기존 이미지 분석 로직과 유사하지만 더 상세한 분석
-            prompt = f"""
-다음 이미지에서 추출된 텍스트를 {analysis_type} 관점에서 분석해주세요:
-
-추출된 텍스트: {extracted_text}
-
-다음 형식으로 JSON 응답해주세요:
-{{
-    "classification": "내용 분류",
-    "main_content": "주요 내용 요약",
-    "is_study_content": true/false,
-    "study_notes": "학습 노트 (학습 내용인 경우)",
-    "key_points": ["핵심 포인트 1", "핵심 포인트 2"],
-    "sentiment": "감정 분석",
-    "business_info": "비즈니스 정보 (해당하는 경우)"
-}}
-"""
-            
-            response = call_ai_service(prompt)
-            
-            try:
-                import json
-                result = json.loads(response)
-                return result
-            except json.JSONDecodeError:
-                return {
-                    "classification": "이미지 텍스트",
-                    "main_content": extracted_text,
-                    "is_study_content": False,
-                    "study_notes": "",
-                    "key_points": [],
-                    "sentiment": "중립",
-                    "business_info": ""
-                }
-        else:
+        # 바로 GPT Vision으로 전체 이미지 분석 진행
+        vision_result = summarize_image_logic(image_data)
+        
+        # 에러가 있는 경우 기본 값 반환
+        if 'error' in vision_result:
             return {
-                "classification": "이미지 (텍스트 없음)",
-                "main_content": "이미지에서 텍스트를 추출할 수 없습니다.",
+                "classification": "이미지 텍스트",
+                "main_content": "죄송하지만 이 이미지의 텍스트를 추출해 드릴 수 없습니다. 이미지의 해상도가 충분하지 않거나 텍스트가 너무 작아서 인식하기 어려울 수 있습니다.",
                 "is_study_content": False,
                 "study_notes": "",
                 "key_points": [],
                 "sentiment": "중립",
                 "business_info": ""
             }
+        
+        # GPT Vision 결과를 분석 형식에 맞게 변환
+        return {
+            "classification": "이미지 텍스트",
+            "main_content": vision_result.get('main_content', '이미지 분석을 완료했습니다.'),
+            "is_study_content": vision_result.get('is_study_content', False),
+            "study_notes": vision_result.get('study_notes', ''),
+            "key_points": [],
+            "sentiment": "중립",
+            "business_info": ""
+        }
             
     except Exception as e:
         print(f"이미지 분석 오류: {str(e)}")
