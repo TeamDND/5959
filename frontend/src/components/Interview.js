@@ -26,9 +26,12 @@ export default function Interview() {
   const messagesEndRef = useRef(null);
   const recordingIntervalRef = useRef(null);
 
-  // 타이머 설정
+  // 타이머 설정 - 각 질문의 timeLimit 합계 사용
   const time = new Date();
-  time.setSeconds(time.getSeconds() + (state.selectedQuestions.length * 300)); // 5분씩
+  const totalTimeLimit = state.selectedQuestions.reduce((total, question) => {
+    return total + (question.timeLimit || 180); // 기본 3분
+  }, 0);
+  time.setSeconds(time.getSeconds() + totalTimeLimit);
   const { seconds, minutes, restart } = useTimer({ 
     expiryTimestamp: time,
     onExpire: () => {
@@ -121,6 +124,48 @@ export default function Interview() {
       isInterviewer: false
     };
     setMessages(prev => [...prev, userMessage]);
+    
+    // 백엔드에 답변 제출 및 평가 받기
+    try {
+      const response = await fetch('http://localhost:5000/api/submit-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: state.sessionId,
+          question: currentQuestion.text,
+          answer: currentAnswer,
+          time_taken: currentQuestion.timeLimit || 180,
+          max_time: currentQuestion.timeLimit || 180
+        })
+      });
+      
+      const evaluationData = await response.json();
+      const score = evaluationData.score || 0;
+      const feedback = evaluationData.feedback || '평가 없음';
+      
+      // Context에 답변, 점수, 피드백 저장
+      dispatch({
+        type: 'SUBMIT_ANSWER',
+        payload: {
+          answer: currentAnswer,
+          score: score,
+          feedback: feedback
+        }
+      });
+      
+    } catch (error) {
+      console.error('답변 평가 실패:', error);
+      // 에러 시 기본값으로 저장
+      dispatch({
+        type: 'SUBMIT_ANSWER',
+        payload: {
+          answer: currentAnswer,
+          score: 0,
+          feedback: '평가 실패'
+        }
+      });
+    }
+    
     setCurrentAnswer('');
 
     // 다음 질문으로 이동
@@ -154,6 +199,16 @@ export default function Interview() {
   };
 
   const handleSkip = () => {
+    // 건너뛰기 시에도 답변 데이터 저장
+    dispatch({
+      type: 'SUBMIT_ANSWER',
+      payload: {
+        answer: '답변하지 않음',
+        score: 0,
+        feedback: '답변을 건너뛰었습니다.'
+      }
+    });
+    
     const currentIndex = state.currentQuestionIndex || 0;
     const nextIndex = currentIndex + 1;
     

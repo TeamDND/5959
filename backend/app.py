@@ -7,6 +7,7 @@ from flask_cors import CORS
 import json
 import time
 import os
+import asyncio
 
 import base64
 from io import BytesIO
@@ -290,7 +291,7 @@ def generate_report():
             "feedback": data['feedback']
         }
         
-        pdf_path = asyncio.run(report_generator.create_pdf_report(session_data))
+        pdf_path = report_generator.create_pdf_report(session_data)
         
         # 파일명만 추출 (전체 경로에서)
         filename = os.path.basename(pdf_path)

@@ -15,16 +15,16 @@ api_key = os.getenv('OPENAI_API_KEY')
 client = None
 if api_key:
     client = OpenAI(api_key=api_key)
-    print("✅ OpenAI API 키가 설정되었습니다.")
+    print("OpenAI API 키가 설정되었습니다.")
 else:
-    print("⚠️ OpenAI API 키가 설정되지 않았습니다. 이미지 분석 기능을 사용할 수 없습니다.")
+    print("OpenAI API 키가 설정되지 않았습니다. 이미지 분석 기능을 사용할 수 없습니다.")
 
 # API 키 확인
 if not os.getenv('OPENAI_API_KEY'):
-    print("⚠️ OpenAI API 키가 설정되지 않았습니다!")
+    print("OpenAI API 키가 설정되지 않았습니다!")
     print("환경변수 OPENAI_API_KEY를 설정해주세요.")
 else:
-    print("✅ OpenAI API 키가 설정되었습니다.")
+    print("OpenAI API 키가 설정되었습니다.")
 
 def call_ai_service(prompt):
     """AI 서비스 호출 함수"""

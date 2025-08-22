@@ -47,22 +47,30 @@ function Result() {
     try {
       const sessionData = {
         session_id: state.sessionId || 'session_' + Date.now(),
-        questions: state.selectedQuestions.map(q => q.question),
-        answers: state.answers,
-        scores: state.scores,
-        feedback: state.feedback
+        questions: state.selectedQuestions.map(q => q.text || q.question || q),
+        answers: state.answers || [],
+        scores: state.scores || [],
+        feedback: state.feedback || []
       };
+      
+      console.log('PDF 생성 요청 데이터:', sessionData);
 
-      const response = await fetch('/api/generate-report', {
+      const response = await fetch('http://localhost:5000/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sessionData)
       });
       
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('PDF 생성 API 오류:', response.status, errorText);
+        throw new Error(`서버 오류: ${response.status}`);
+      }
+      
       const data = await response.json();
       if (data.success) {
         // 파일 다운로드
-        const downloadUrl = data.download_url;
+        const downloadUrl = `http://localhost:5000${data.download_url}`;
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = data.filename;
@@ -71,10 +79,13 @@ function Result() {
         document.body.removeChild(link);
         
         alert('면접 결과 리포트가 다운로드되었습니다!');
+      } else {
+        console.error('PDF 생성 실패:', data.error);
+        alert(`리포트 생성에 실패했습니다: ${data.error}`);
       }
     } catch (error) {
       console.error('리포트 생성 실패:', error);
-      alert('리포트 생성에 실패했습니다.');
+      alert(`리포트 생성에 실패했습니다: ${error.message}`);
     }
   };
 
@@ -110,7 +121,7 @@ function Result() {
                   <div className="result-stat-label">합격 기준 통과</div>
                 </div>
                 <div className="result-stat-card">
-                  <div className="result-stat-value">{Math.max(...state.scores)}</div>
+                  <div className="result-stat-value">{state.scores.length > 0 ? Math.max(...state.scores) : 0}</div>
                   <div className="result-stat-label">최고 점수</div>
                 </div>
                 <div className="result-stat-card">
