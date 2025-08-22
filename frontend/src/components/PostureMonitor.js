@@ -10,7 +10,6 @@ function PostureMonitor() {
     const canvasRef = useRef(null);
     const [stream, setStream] = useState(null);
     const [baseImage, setBaseImage] = useState(null);
-    const [baseImageWithLandmarks, setBaseImageWithLandmarks] = useState(null);
     const [isBaseImageCaptured, setIsBaseImageCaptured] = useState(false);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -19,10 +18,8 @@ function PostureMonitor() {
     const [analysisInterval, setAnalysisInterval] = useState(null);
     const [analysisCount, setAnalysisCount] = useState(0);
     const [lastCapturedImage, setLastCapturedImage] = useState(null);
-    const [lastCapturedImageWithLandmarks, setLastCapturedImageWithLandmarks] = useState(null);
     const [analysisStartTime, setAnalysisStartTime] = useState(null);
     const [previousPostureStatus, setPreviousPostureStatus] = useState('normal'); // 이전 자세 상태 추적
-    const [realtimeLandmarksData, setRealtimeLandmarksData] = useState(null);
 
     // 🎨 커스텀 미니 알림창 상태
     const [miniAlert, setMiniAlert] = useState({
@@ -44,7 +41,6 @@ function PostureMonitor() {
     useEffect(() => {
         // 화면 진입 시 기본 이미지 초기화
         setBaseImage(null);
-        setBaseImageWithLandmarks(null);
         setIsBaseImageCaptured(false);
         localStorage.removeItem('postureBaseImage');
 
@@ -55,22 +51,6 @@ function PostureMonitor() {
         }
 
         startCamera();
-
-        // 실시간 자세 화면에서 주기적으로 랜드마크 업데이트
-        const realtimeInterval = setInterval(async () => {
-            if (realtimeVideoRef.current && isCameraOn) {
-                const canvas = canvasRef.current;
-                if (canvas) {
-                    const context = canvas.getContext('2d');
-                    canvas.width = realtimeVideoRef.current.videoWidth;
-                    canvas.height = realtimeVideoRef.current.videoHeight;
-                    context.drawImage(realtimeVideoRef.current, 0, 0);
-                    
-                    const imageData = canvas.toDataURL('image/jpeg');
-                    await drawLandmarksOnImage(imageData, 'realtime');
-                }
-            }
-        }, 2000); // 2초마다 업데이트
 
         // 📱 페이지 가시성 변경 감지 (백그라운드 모드 지원)
         const handleVisibilityChange = () => {
@@ -101,9 +81,6 @@ function PostureMonitor() {
             stopCamera();
             if (analysisInterval) {
                 clearInterval(analysisInterval);
-            }
-            if (realtimeInterval) {
-                clearInterval(realtimeInterval);
             }
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
@@ -189,9 +166,6 @@ function PostureMonitor() {
                     localStorage.setItem('postureBaseImage', imageData);
                     localStorage.setItem('postureAnalysisResult', JSON.stringify(result));
                     console.log('✅ 기본 자세 이미지 저장 완료');
-
-                    // 기본 이미지에 랜드마크 그리기
-                    await drawLandmarksOnImage(imageData, 'base');
                 } else {
                     alert('이미지 저장 실패: ' + result.error);
                 }
@@ -223,34 +197,6 @@ function PostureMonitor() {
             return imageData;
         }
         return null;
-    };
-
-    const drawLandmarksOnImage = async (imageData, type) => {
-        try {
-            const response = await fetch('/api/posture/draw-landmarks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: imageData })
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-                if (type === 'base') {
-                    setBaseImageWithLandmarks(result.annotated_image);
-                    console.log('✅ 기본 이미지에 랜드마크 그리기 완료');
-                } else if (type === 'current') {
-                    setLastCapturedImageWithLandmarks(result.annotated_image);
-                    console.log('✅ 현재 이미지에 랜드마크 그리기 완료');
-                } else if (type === 'realtime') {
-                    setRealtimeLandmarksData(result.annotated_image);
-                }
-            } else {
-                console.error('랜드마크 그리기 실패:', result.error);
-            }
-        } catch (error) {
-            console.error('랜드마크 그리기 API 호출 오류:', error);
-        }
     };
 
     const analyzePosture = async () => {
@@ -303,9 +249,6 @@ function PostureMonitor() {
             const result = await response.json();
 
             if (response.ok) {
-                // 현재 이미지에 랜드마크 그리기
-                await drawLandmarksOnImage(currentImage, 'current');
-
                 // 🔄 정상화 감지: 이전 상태가 경고/주의였고 현재 상태가 정상인 경우
                 const isRecovered = (previousPostureStatus === 'warning' || previousPostureStatus === 'alert') && result.status === 'normal';
 
@@ -712,12 +655,11 @@ function PostureMonitor() {
     };
 
     return (
-        <Layout>
         <div className="posture-monitor">
+            <Layout>
                 <div className="posture-wrapper">
                     <div className="title">
-                        <h2>💡 AI 자세 분석 도구</h2>
-                        <p>기본 자세를 기준으로 실시간 자세 이탈을 감지하여 알려줍니다</p>
+                        <h2>AI 자세 분석 도구</h2>
                     </div>
                     <div className="container">
 
@@ -845,9 +787,9 @@ function PostureMonitor() {
                                                 className="video-element"
                                             />
                                         ) : (
-                                            // 촬영된 기본 이미지 표시 (랜드마크 포함)
+                                            // 촬영된 기본 이미지 표시
                                             <img
-                                                src={baseImageWithLandmarks || baseImage}
+                                                src={baseImage}
                                                 alt="기본 자세"
                                                 className="captured-image"
                                             />
@@ -885,7 +827,7 @@ function PostureMonitor() {
                                     <h4>마지막 분석 사진</h4>
                                     {lastCapturedImage ? (
                                         <img
-                                            src={lastCapturedImageWithLandmarks || lastCapturedImage}
+                                            src={lastCapturedImage}
                                             alt="마지막 캡처된 이미지"
                                             className="captured-image"
                                         />
@@ -902,20 +844,13 @@ function PostureMonitor() {
                                 {/* 3. 실시간 자세 이미지 */}
                                 <div className="image-container">
                                     <h4>실시간 자세</h4>
-                                    {realtimeLandmarksData ? (
-                                        <img
-                                            src={realtimeLandmarksData}
-                                            alt="실시간 자세 (랜드마크 포함)"
-                                            className="captured-image"
-                                        />
-                                    ) : (
-                                        <video
-                                            ref={realtimeVideoRef}
-                                            autoPlay
-                                            playsInline
-                                            className="video-element"
-                                        />
-                                    )}
+                                    {/* 처음부터 항상 웹캠 표시 */}
+                                    <video
+                                        ref={realtimeVideoRef}
+                                        autoPlay
+                                        playsInline
+                                        className="video-element"
+                                    />
                                     <p className="description-text">
                                         실시간 자세 화면
                                     </p>
@@ -978,7 +913,7 @@ function PostureMonitor() {
                         </div>
                     </div>
                 </div>
-            
+            </Layout>
 
             {/* 🎨 커스텀 미니 알림창 */}
             {miniAlert.isVisible && (
@@ -1024,7 +959,6 @@ function PostureMonitor() {
                 </div>
             )}
         </div>
-        </Layout>
     );
 }
 

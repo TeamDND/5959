@@ -55,7 +55,7 @@
 }
 .title h2 {
   font-size: 3rem;
-  color: #333;
+  color: #2c3e50;
   margin-bottom: 15px;
   font-weight: 700;
 }
@@ -100,7 +100,6 @@
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .posture-monitor .radio-label {

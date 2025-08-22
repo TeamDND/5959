@@ -119,7 +119,7 @@ function Self() {
       setLoading(false);
     }
   };
-  return (/* 리턴 */
+  return (
     <>
     <Layout>
       <div className="title-wrapper">
@@ -128,8 +128,7 @@ function Self() {
           <p>텍스트, 이미지, 링크를 분석하여 분류하고 요약해드립니다</p>
         </div>
       <div className="container">
-        <div className="content-wrapper">
-          <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {/* 자기소개서 파일 업로드 */}
           <div className="form-group">
             <label>1. 자기소개서 파일 (.txt, .pdf)을 업로드하세요</label>
@@ -264,8 +263,7 @@ function Self() {
             ))}
           </div>
         )}
-          </div>
-        </div>
+      </div>
       </div>{/* 표시 */}
     </Layout>
     </>
