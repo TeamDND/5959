@@ -1,16 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Send, MessageCircle, Loader } from 'lucide-react';
 import Message from './Message';
 import EmotionIndicator from './EmotionIndicator';
 import chatAPI from './api';
-import Layout from './Layout.js';
+import { 
+  addMessage, 
+  setCurrentEmotion, 
+  setLoading, 
+  clearMessages, 
+  addBotMessage 
+} from '../store/mentalCareSlice';
 import '../style/MentalCareChat.css';
 
-const MentalCareChat = () => {
-  const [messages, setMessages] = useState([]);
+const MentalCareChat = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const { messages, currentEmotion, isLoading } = useSelector(state => state.mentalCare);
   const [inputMessage, setInputMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentEmotion, setCurrentEmotion] = useState('neutral');
   const messagesEndRef = useRef(null);
 
   // 스크롤을 맨 아래로
@@ -28,46 +34,42 @@ const MentalCareChat = () => {
 
     const userMessage = inputMessage.trim();
     setInputMessage('');
-    setIsLoading(true);
+    dispatch(setLoading(true));
 
     // 사용자 메시지 추가
-    setMessages(prev => [...prev, {
+    dispatch(addMessage({
       id: Date.now(),
       message: userMessage,
       isUser: true,
       timestamp: new Date().toISOString()
-    }]);
+    }));
 
     try {
       // API 호출
       const response = await chatAPI.sendMessage(userMessage);
       
       // 봇 응답 추가
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
+      dispatch(addBotMessage({
         message: response.message,
-        isUser: false,
         emotion: response.emotion,
         quote: response.quote,
         timestamp: response.timestamp
-      }]);
+      }));
       
       // 현재 감정 상태 업데이트
-      setCurrentEmotion(response.emotion);
+      dispatch(setCurrentEmotion(response.emotion));
       
     } catch (error) {
       console.error('Message send error:', error);
       
       // 에러 시 기본 응답
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
+      dispatch(addBotMessage({
         message: '죄송해요, 지금 응답하기 어려워요. 잠시 후 다시 시도해주세요.',
-        isUser: false,
         emotion: 'neutral',
         timestamp: new Date().toISOString()
-      }]);
+      }));
     } finally {
-      setIsLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -83,17 +85,16 @@ const MentalCareChat = () => {
   const handleClearChat = async () => {
     try {
       await chatAPI.clearHistory();
-      setMessages([]);
-      setCurrentEmotion('neutral');
+      dispatch(clearMessages());
     } catch (error) {
       console.error('Clear chat error:', error);
     }
   };
 
   return (
-    <Layout>
-      <div className="container">
-        <div className="card">
+    <div className="mentalcare-modal">
+      <div className="modal-overlay">
+        <div className="modal-container">
           <div className="chat-app">
             
             {/* 헤더 */}
@@ -102,11 +103,16 @@ const MentalCareChat = () => {
                 <MessageCircle size={24} />
                 멘탈케어 상담봇
               </h1>
-              {messages.length > 0 && (
-                <button className="clear-button" onClick={handleClearChat}>
-                  새로운 대화
+              <div className="header-buttons">
+                {messages.length > 0 && (
+                  <button className="clear-button" onClick={handleClearChat}>
+                    새로운 대화
+                  </button>
+                )}
+                <button className="close-button" onClick={onClose}>
+                  ✕
                 </button>
-              )}
+              </div>
             </div>
 
             {/* 현재 감정 표시 */}
@@ -168,7 +174,7 @@ const MentalCareChat = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

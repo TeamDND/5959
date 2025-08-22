@@ -1,0 +1,31 @@
+/* Google Fonts - Noto Sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Self 컴포넌트의 답변생성하기 버튼 스타일 */
+.submit-btn {
+  width: 100%;
+  padding: 20px;
+  background: #005793;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 87, 147, 0.3);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #F76800;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(247, 104, 0, 0.4);
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
