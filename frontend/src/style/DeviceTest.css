@@ -152,7 +152,7 @@
   margin-top: 2rem;
   padding: 2rem;
   border-radius: 15px;
-  background: linear-gradient(45deg, #E6F0F5, #f3e5f5);
+  background: #E6F0F5;
   border: 3px solid #005793;
   text-align: center;
 }
@@ -236,12 +236,12 @@
 }
 
 .time-badge {
-  background: linear-gradient(45deg, #F76800, #ff8e53);
+  background: #F76800;
   color: white;
 }
 
 .focus-badge {
-  background: linear-gradient(45deg, #005793, #4a90c2);
+  background: #005793;
   color: white;
 }
 
