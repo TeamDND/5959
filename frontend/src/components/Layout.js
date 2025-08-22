@@ -1,101 +1,46 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from './Header.js';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useMentalCare } from '../App';
+import Header from './Header';
 import '../style/global.css';
 
-function Layout({ children }) {
-    const navigate = useNavigate();
+const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { openMentalCare } = useMentalCare();
+  
+  const isMainPage = location.pathname === '/';
 
-    return (
-        <div className="layout">
-            {/* 헤더 */}
-            <Header />
-            
-            {/* 메인 콘텐츠 영역 */}
-            <main className="main-content">
-                {children}
-            </main>
-
-            {/* 채팅 버튼 - 오른쪽 하단 고정 */}
-            <div style={{
-                position: 'fixed',
-                bottom: '110px',
-                right: '30px',
-                zIndex: 1000
-            }}>
-                <button
-                    onClick={() => navigate('/mentalcare')}
-                    style={{
-                        width: '60px',
-                        height: '60px',
-                        borderRadius: '50%',
-                        backgroundColor: '#FFC62E',
-                        color: 'white',
-                        border: 'none',
-                        fontSize: '24px',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(0, 87, 147, 0.4)',
-                        transition: 'all 0.3s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                    onMouseOver={(e) => {
-                        e.target.style.transform = 'scale(1.1)';
-                        e.target.style.boxShadow = '0 6px 16px rgba(0, 87, 147, 0.6)';
-                    }}
-                    onMouseOut={(e) => {
-                        e.target.style.transform = 'scale(1)';
-                        e.target.style.boxShadow = '0 4px 12px rgba(0, 87, 147, 0.4)';
-                    }}
-                    title="AI 멘탈 상담"
-                >
-                    💬
-                </button>
-            </div>
-
-            {/* 홈 버튼 - 오른쪽 하단 고정 */}
-            <div style={{
-                position: 'fixed',
-                bottom: '30px',
-                right: '30px',
-                zIndex: 1000
-            }}>
-                <button
-                    onClick={() => navigate('/')}
-                    style={{
-                        width: '60px',
-                        height: '60px',
-                        borderRadius: '50%',
-                        backgroundColor: '#667eea',
-                        color: 'white',
-                        border: 'none',
-                        fontSize: '24px',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
-                        transition: 'all 0.3s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                    onMouseOver={(e) => {
-                        e.target.style.transform = 'scale(1.1)';
-                        e.target.style.boxShadow = '0 6px 16px rgba(102, 126, 234, 0.6)';
-                    }}
-                    onMouseOut={(e) => {
-                        e.target.style.transform = 'scale(1)';
-                        e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
-                    }}
-                >
-                    <img src='/home.jpg' style={{ width: '60px', height: '60px',borderRadius: '50%'}}/>
-                </button>
-            </div>
-
-
-
-
-        </div>
-    );
-}
+  return (
+    <div className="layout">
+         <Header />
+      <div className="main-content">
+        {children}
+      </div>
+      
+      {/* 홈 버튼 - 오른쪽 하단 고정 */}
+      <div className="home-button-container">
+        <button 
+          className="home-button"
+          onClick={() => navigate('/')}
+          title="홈으로"
+        >
+          🏠
+        </button>
+      </div>
+      
+      {/* 채팅 버튼 - 홈 버튼 위에 위치 */}
+      <div className="chat-button-container">
+        <button 
+          className="chat-button"
+          onClick={openMentalCare}
+          title="AI 멘탈 상담"
+        >
+          💬
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default Layout;
