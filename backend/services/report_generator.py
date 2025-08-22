@@ -12,9 +12,6 @@ from typing import Dict, List
 
 class ReportGenerator:
     def __init__(self):
-        self.output_dir = "reports"
-        os.makedirs(self.output_dir, exist_ok=True)
-        
         # 한글 폰트 설정
         self.font_name = self._setup_korean_font()
     
@@ -59,7 +56,9 @@ class ReportGenerator:
     
     def create_pdf_report(self, session_data: Dict) -> str:
         filename = f"interview_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-        file_path = os.path.join(self.output_dir, filename)
+        # 임시 파일로만 생성 (폴더 저장 안함)
+        import tempfile
+        file_path = os.path.join(tempfile.gettempdir(), filename)
         
         doc = SimpleDocTemplate(file_path, pagesize=A4)
         story = []
