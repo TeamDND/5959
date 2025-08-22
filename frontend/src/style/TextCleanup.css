@@ -7,14 +7,7 @@
   flex-direction: column;
   width: 100%;
 }
-.container {
-  font-family: 'Noto Sans', sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  min-height: 100vh;
 
-}
 
 .container .header {
   text-align: center;
@@ -44,13 +37,13 @@
   font-weight: 400;
 }
 
-.content-wrapper {
+/* .content-wrapper {
   background: white;
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   margin-bottom: 40px;
-}
+} */
 
 /* 분석 유형 선택 */
 .analysis-type-selector {
