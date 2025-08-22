@@ -402,6 +402,24 @@ def posture_hello():
     """자세 서비스 테스트 API"""
     return jsonify({'message': '자세 경고알림 서비스가 준비되었습니다!'})
 
+@app.route('/api/posture/draw-landmarks', methods=['POST'])
+def posture_draw_landmarks():
+    """이미지에 pose landmark를 그리는 API"""
+    try:
+        data = request.get_json()
+        if not data or 'image' not in data:
+            return jsonify({'error': '이미지 데이터가 없습니다.'}), 400
+        
+        result = posture_analyzer.draw_landmarks_on_image(data['image'])
+        
+        if result['success']:
+            return jsonify(result)
+        else:
+            return jsonify({'error': result['error']}), 400
+            
+    except Exception as e:
+        return jsonify({'error': f'서버 오류: {str(e)}'}), 500
+
 if __name__ == '__main__':
 
     app.run(

@@ -103,28 +103,28 @@ class PostureAnalyzer:
             # 자세 점수 계산
             score = 1.0
             
-            # 어깨 수평성 (0.3 가중치)
+            # 어깨 수평성 (0.35 가중치) - 기존 0.3과 변경후 0.4의 중간값
             if shoulder_height_diff < 0.05:  # 5% 이내 차이
                 score -= 0.0
             elif shoulder_height_diff < 0.1:  # 10% 이내 차이
                 score -= 0.1
             else:
-                score -= 0.3
+                score -= 0.35
             
-            # 머리 위치 (0.4 가중치)
+            # 머리 위치 (0.325 가중치) - 기존 0.4와 변경후 0.25의 중간값
             if head_above_shoulders:
                 score -= 0.0
             else:
-                score -= 0.4
+                score -= 0.325
             
-            # 목 각도 (0.3 가중치)
+            # 목 각도 (0.325 가중치) - 기존 0.3과 변경후 0.35의 중간값
             neck_angle = self._calculate_neck_angle(landmarks)
-            if neck_angle < 15:  # 15도 이내
+            if neck_angle < 17.5:  # 15도와 20도의 중간값
                 score -= 0.0
-            elif neck_angle < 30:  # 30도 이내
+            elif neck_angle < 35:  # 30도와 40도의 중간값
                 score -= 0.15
             else:
-                score -= 0.3
+                score -= 0.325
             
             return max(0.0, score)
             
@@ -294,3 +294,76 @@ class PostureAnalyzer:
             }
         else:
             return result
+    
+    def draw_landmarks_on_image(self, image_data):
+        """이미지에 pose landmark를 그려서 반환"""
+        try:
+            # base64 이미지 데이터를 numpy 배열로 변환
+            if image_data.startswith('data:image'):
+                image_data = image_data.split(',')[1]
+            
+            image_bytes = base64.b64decode(image_data)
+            nparr = np.frombuffer(image_bytes, np.uint8)
+            image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            
+            if image is None:
+                return {
+                    'success': False,
+                    'error': '이미지 디코딩 실패'
+                }
+            
+            # BGR을 RGB로 변환 (MediaPipe는 RGB 사용)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            
+            # MediaPipe로 포즈 랜드마크 추출
+            results = self.pose.process(image_rgb)
+            
+            if not results.pose_landmarks:
+                return {
+                    'success': False,
+                    'error': '포즈 랜드마크를 찾을 수 없음'
+                }
+            
+            # 랜드마크를 이미지에 그리기
+            annotated_image = image_rgb.copy()
+            
+            # MediaPipe Drawing 모듈 초기화
+            mp_drawing = mp.solutions.drawing_utils
+            mp_drawing_styles = mp.solutions.drawing_styles
+            
+            # 랜드마크와 연결선 그리기
+            mp_drawing.draw_landmarks(
+                annotated_image,
+                results.pose_landmarks,
+                self.mp_pose.POSE_CONNECTIONS,
+                landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
+            )
+            
+            # RGB를 BGR로 변환 (OpenCV 형식)
+            annotated_image_bgr = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
+            
+            # 이미지를 base64로 인코딩
+            _, buffer = cv2.imencode('.jpg', annotated_image_bgr)
+            annotated_image_base64 = base64.b64encode(buffer).decode('utf-8')
+            
+            # 랜드마크를 JSON 직렬화 가능한 형태로 변환
+            landmarks_data = []
+            for landmark in results.pose_landmarks.landmark:
+                landmarks_data.append({
+                    'x': float(landmark.x),
+                    'y': float(landmark.y),
+                    'z': float(landmark.z),
+                    'visibility': float(landmark.visibility) if hasattr(landmark, 'visibility') else 0.0
+                })
+            
+            return {
+                'success': True,
+                'annotated_image': f'data:image/jpeg;base64,{annotated_image_base64}',
+                'landmarks': landmarks_data
+            }
+            
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e)
+            }
