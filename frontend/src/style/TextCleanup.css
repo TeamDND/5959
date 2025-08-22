@@ -12,8 +12,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-  min-height: 50vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+
 }
 
 .container .header {
@@ -33,7 +33,7 @@
   width: 100%;
 }
 .title h2 {
-  font-size: 30px;
+  font-size: 3rem;
   color: #2c3e50;
   margin-bottom: 15px;
   font-weight: 700;
@@ -48,7 +48,7 @@
   background: white;
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   margin-bottom: 40px;
 }
 
@@ -56,7 +56,7 @@
 .analysis-type-selector {
   margin-bottom: 40px;
   text-align: center;
-  background: #f8f9fa;
+  background: #f1f1f1;
   padding: 30px;
   border-radius: 15px;
   border: 1px solid #e9ecef;
@@ -111,7 +111,7 @@
   margin-bottom: 40px;
   justify-content: center;
   flex-wrap: wrap;
-  background: #f8f9fa;
+  background: #f1f1f1;
   padding: 20px;
   border-radius: 15px;
   border: 1px solid #e9ecef;
@@ -163,7 +163,7 @@
   font-family: 'Noto Sans', sans-serif;
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #333;
   margin-bottom: 15px;
 }
 
@@ -359,7 +359,7 @@
 
 .result-section-content.recommendations {
   background: #f0f8ff;
-  border-left: 4px solid #007bff;
+
 }
 
 .result-section-content.recommendations ul {
