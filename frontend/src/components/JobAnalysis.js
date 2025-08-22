@@ -118,7 +118,7 @@ function JobAnalysis() {
   return (
     <Layout>
       <div className="job-analysis-wrapper">
-        <h1 className="job-analysis-title-standalone">채용공고 분석</h1>
+        <h1 className="job-analysis-title-standalone">🔍 채용공고 분석</h1>
         <div className="container">
           <div className="card">
             <div className="job-analysis-card">
