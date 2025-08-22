@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
           onClick={() => navigate('/')}
           title="홈으로"
         >
-          🏠
+        <img src={"/home.jpg"} alt="home" />
         </button>
       </div>
       
@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
           onClick={openMentalCare}
           title="AI 멘탈 상담"
         >
-          💬
+          <img src="/chat.jpg" alt="chat" />
         </button>
       </div>
     </div>

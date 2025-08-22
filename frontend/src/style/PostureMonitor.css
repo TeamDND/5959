@@ -18,7 +18,7 @@
 
 /* 헤더 스타일 */
 .posture-monitor .header {
-  background-color: var(--primary-color);
+
   color: var(--white);
   padding: 20px;
   text-align: center;

@@ -331,6 +331,15 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.home-button img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .home-button:hover {
@@ -359,6 +368,15 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.chat-button img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .chat-button:hover {

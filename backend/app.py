@@ -308,7 +308,8 @@ def generate_report():
 @app.route('/api/download-report/<filename>')
 def download_report(filename):
     """PDF 리포트 다운로드"""
-    file_path = os.path.join("reports", filename)
+    import tempfile
+    file_path = os.path.join(tempfile.gettempdir(), filename)
     
     if not os.path.exists(file_path):
         return jsonify({"error": "파일을 찾을 수 없습니다."}), 404
