@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageSquare, Users, Mail, Zap, Send, CheckCircle, Lightbulb, Home, ArrowLeft } from 'lucide-react';
+import { MessageSquare, Users, Mail, Send, CheckCircle, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import '../style/App.css';
 import '../style/NetworkingAI.css';
 import Layout from './Layout.js';
 
@@ -70,9 +71,9 @@ const NetworkingAI = () => {
     const greeting = tone === 'casual' ? '안녕하세요!' : '안녕하세요.';
     
     const introductions = [
-      `저는 현재 ${role || '취업'} 준비를 하고 있는 김준혁입니다.`,
-      `${role || 'IT'} 분야로 커리어를 시작하려는 김준혁이라고 합니다.`,
-      `${role || '개발'} 분야에 관심이 많은 취업준비생 김준혁입니다.`
+      `저는 현재 ${role || '취업'} 준비를 하고 있는 OOO입니다.`,
+      `${role || 'IT'} 분야로 커리어를 시작하려는 OOO이라고 합니다.`,
+      `${role || '개발'} 분야에 관심이 많은 취업준비생 OOO입니다.`
     ];
     
     const randomIntro = introductions[Math.floor(Math.random() * introductions.length)];
@@ -116,7 +117,7 @@ ${request}
 
 ${closing}
 
-김준혁 드림`;
+OOO 드림`;
   };
 
   // 이메일 템플릿 생성
@@ -156,7 +157,7 @@ ${mainContent}
 
 ${closing}
 
-김준혁`;
+OOO`;
   };
 
   // 네트워킹 시뮬레이션 생성
@@ -171,7 +172,7 @@ ${closing}
     if (input.includes('컨퍼런스')) {
       scenario = `${role || '개발자'} 컨퍼런스`;
       opening = '"안녕하세요! 방금 전 발표 정말 인상깊었어요."';
-      response = `"안녕하세요! 감사합니다. 저는 ${role || '개발'} 분야 취업 준비 중인 김준혁이라고 합니다. 혹시 어떤 업무를 담당하고 계신가요?"`;
+      response = `"안녕하세요! 감사합니다. 저는 ${role || '개발'} 분야 취업 준비 중인 OOO이라고 합니다. 혹시 어떤 업무를 담당하고 계신가요?"`;
       tips = [
         '발표나 세션 내용을 구체적으로 언급하며 대화 시작',
         '최신 기술 트렌드나 발표 내용에 대한 의견 교환',
@@ -181,7 +182,7 @@ ${closing}
     } else if (input.includes('박람회') || input.includes('채용')) {
       scenario = '채용 박람회';
       opening = `"안녕하세요! ${company || '이 회사'}에 대해 더 알고 싶어서 왔습니다."`;
-      response = `"안녕하세요! 저는 ${role || '취업'} 준비 중인 김준혁입니다. ${company || '회사'}의 어떤 점이 가장 매력적인지 궁금합니다."`;
+      response = `"안녕하세요! 저는 ${role || '취업'} 준비 중인 OOO입니다. ${company || '회사'}의 어떤 점이 가장 매력적인지 궁금합니다."`;
       tips = [
         '회사의 비전, 문화, 복지에 대한 구체적 질문',
         '해당 직무의 실제 업무 내용과 성장 경로 문의',
@@ -191,7 +192,7 @@ ${closing}
     } else {
       scenario = '업계 네트워킹 모임';
       opening = '"안녕하세요! 처음 뵙겠습니다. 어떤 일을 하고 계신가요?"';
-      response = `"안녕하세요! 저는 ${role || '취업'} 준비 중인 김준혁입니다. 어떤 일을 하고 계신가요?"`;
+      response = `"안녕하세요! 저는 ${role || '취업'} 준비 중인 OOO입니다. 어떤 일을 하고 계신가요?"`;
       tips = [
         '상대방에게 먼저 질문하여 관심을 보이세요',
         '공통 관심사를 찾아 자연스럽게 연결하세요',
@@ -238,7 +239,7 @@ ${closing}
           type: type,
           input: input,
           user_context: {
-            name: '김준혁',
+            name: 'OOO',
             role: 'job_seeker'
           }
         })
@@ -308,97 +309,47 @@ ${closing}
 
   return (
     <Layout>
-      <div className="main-content">
-        <div className="container">
-          {/* 메인 헤더 */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-3 rounded-full" style={{ backgroundColor: 'var(--primary-color)' }}>
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h1 className="text-3xl font-bold" style={{ color: 'var(--primary-color)' }}>네트워킹 AI</h1>
-            </div>
-            <p className="text-lg" style={{ color: 'var(--text-color)', maxWidth: '600px', margin: '0 auto' }}>
-              취준생을 위한 스마트한 네트워킹 & 커뮤니케이션 도구
-              <br />LinkedIn 메시지부터 이메일 작성, 실전 대화 연습까지!
-            </p>
-          </div>
+      <div className="networking-wrapper">
+        <div className="title">
+          <h1>🤝 네트워킹 AI</h1>
+          <p>
+            취준생을 위한 스마트한 네트워킹 & 커뮤니케이션 도구
+            <br />LinkedIn 메시지부터 이메일 작성, 실전 대화 연습까지!
+          </p>
+        </div>
 
-          {/* 탭 네비게이션 */}
-          <div className="card animate-fade-in">
-          <div 
-            className="tab-container"
-            style={{ 
-              display: 'flex', 
-              gap: '15px', 
-              marginBottom: '30px', 
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}>
-            {tabs.map((tab) => {
-              const IconComponent = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setResult('');
-                    setUserInput('');
-                  }}
-                  className="btn tab-button"
-                  style={{
-                    backgroundColor: activeTab === tab.id ? 'var(--primary-color)' : 'var(--secondary-color)',
-                    color: activeTab === tab.id ? 'var(--white)' : 'var(--primary-color)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    border: `2px solid ${activeTab === tab.id ? 'var(--primary-color)' : 'var(--primary-color)'}`,
-                    borderRadius: '10px',
-                    padding: '12px 20px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    minWidth: '140px',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <IconComponent className="w-4 h-4" />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+        <div className="container">
+          <div className="content-wrapper">
+            {/* 탭 네비게이션 */}
+            <div className="tab-container">
+              {tabs.map((tab) => {
+                const IconComponent = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id);
+                      setResult('');
+                      setUserInput('');
+                    }}
+                    className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                  >
+                    <IconComponent size={16} />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
 
             {/* 입력 영역 */}
-            <div style={{ marginTop: '30px' }}>
-              <div style={{ marginBottom: '15px' }}>
-                <label 
-                  className="text-primary" 
-                  style={{ 
-                    display: 'block', 
-                    fontSize: '16px', 
-                    fontWeight: '600', 
-                    marginBottom: '10px',
-                    color: 'var(--primary-color)'
-                  }}
-                >
-                  상황을 자세히 설명해주세요
-                </label>
+            <div className="input-section">
+              <div className="input-group">
+                <label>상황을 자세히 설명해주세요</label>
                 <textarea
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   placeholder={placeholders[activeTab]}
-                  style={{
-                    width: '100%',
-                    padding: '15px',
-                    border: '2px solid var(--primary-color)',
-                    borderRadius: '10px',
-                    fontSize: '14px',
-                    fontFamily: 'Noto Sans, sans-serif',
-                    resize: 'none',
-                    minHeight: '100px',
-                    backgroundColor: 'var(--white)'
-                  }}
+                  className="input-textarea"
                   rows="4"
                 />
               </div>
@@ -406,29 +357,11 @@ ${closing}
               <button
                 onClick={handleSubmit}
                 disabled={isLoading || !userInput.trim()}
-                className="btn btn-accent"
-                style={{
-                  width: '100%',
-                  fontSize: '16px',
-                  padding: '15px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  opacity: (isLoading || !userInput.trim()) ? '0.5' : '1',
-                  cursor: (isLoading || !userInput.trim()) ? 'not-allowed' : 'pointer'
-                }}
+                className="submit-btn"
               >
                 {isLoading ? (
                   <>
-                    <div style={{
-                      width: '20px',
-                      height: '20px',
-                      border: '2px solid var(--white)',
-                      borderTop: '2px solid transparent',
-                      borderRadius: '50%',
-                      animation: 'spin 1s linear infinite'
-                    }} />
+                    <div className="loading-spinner" />
                     <span>AI가 생성 중입니다...</span>
                   </>
                 ) : (
@@ -443,43 +376,20 @@ ${closing}
 
           {/* 결과 출력 */}
           {result && (
-            <div className="card animate-slide-up" style={{ marginTop: '30px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                <CheckCircle size={20} style={{ color: 'var(--accent-color)' }} />
-                <h3 style={{ 
-                  fontSize: '18px', 
-                  fontWeight: '600', 
-                  color: 'var(--primary-color)',
-                  margin: 0
-                }}>
-                  AI 추천 결과
-                </h3>
+            <div className="result-card animate-slide-up">
+              <div className="result-header">
+                <CheckCircle size={20} />
+                <h3>AI 추천 결과</h3>
               </div>
               
-              <div style={{
-                backgroundColor: 'var(--secondary-color)',
-                border: '1px solid var(--primary-color)',
-                borderRadius: '10px',
-                padding: '20px',
-                marginBottom: '20px'
-              }}>
-                <pre style={{
-                  whiteSpace: 'pre-wrap',
-                  fontSize: '14px',
-                  color: 'var(--text-color)',
-                  fontFamily: 'Noto Sans, sans-serif',
-                  lineHeight: '1.6',
-                  margin: 0
-                }}>
-                  {result}
-                </pre>
+              <div className="result-content">
+                <pre className="result-text">{result}</pre>
               </div>
               
-              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+              <div className="button-group">
                 <button
                   onClick={() => navigator.clipboard.writeText(result)}
-                  className="btn btn-primary"
-                  style={{ flex: '1', minWidth: '120px' }}
+                  className="btn-primary"
                 >
                   📋 텍스트 복사
                 </button>
@@ -488,8 +398,7 @@ ${closing}
                     setUserInput('');
                     setResult('');
                   }}
-                  className="btn btn-accent"
-                  style={{ flex: '1', minWidth: '120px' }}
+                  className="btn-accent"
                 >
                   ✏️ 새로 작성
                 </button>
@@ -499,17 +408,10 @@ ${closing}
 
           {/* 사용 가이드 */}
           {!result && (
-            <div className="card" style={{ marginTop: '30px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                <Lightbulb size={20} style={{ color: 'var(--accent-color)' }} />
-                <h3 style={{ 
-                  fontSize: '18px', 
-                  fontWeight: '600', 
-                  color: 'var(--primary-color)',
-                  margin: 0
-                }}>
-                  사용 팁
-                </h3>
+            <div className="guide-card">
+              <div className="guide-header">
+                <Lightbulb size={20} />
+                <h3>사용 팁</h3>
               </div>
               
               <div className="components-grid">
@@ -517,36 +419,24 @@ ${closing}
                   <div className="component-icon">
                     <Users size={24} />
                   </div>
-                  <h4 style={{ color: 'var(--primary-color)', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
-                    LinkedIn 메시지
-                  </h4>
-                  <p style={{ color: 'var(--text-color)', fontSize: '14px', lineHeight: '1.5' }}>
-                    업계 선배나 관심 회사 직원에게 보낼 정중하고 효과적인 메시지를 생성합니다.
-                  </p>
+                  <h4>LinkedIn 메시지</h4>
+                  <p>업계 선배나 관심 회사 직원에게 보낼 정중하고 효과적인 메시지를 생성합니다.</p>
                 </div>
                 
                 <div className="component-card">
-                  <div className="component-icon" style={{ backgroundColor: 'var(--accent-color)' }}>
+                  <div className="component-icon accent">
                     <Mail size={24} />
                   </div>
-                  <h4 style={{ color: 'var(--primary-color)', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
-                    이메일 템플릿
-                  </h4>
-                  <p style={{ color: 'var(--text-color)', fontSize: '14px', lineHeight: '1.5' }}>
-                    면접 문의, 지원서 제출, 업무 협의 등 다양한 상황의 이메일 템플릿을 제공합니다.
-                  </p>
+                  <h4>이메일 템플릿</h4>
+                  <p>면접 문의, 지원서 제출, 업무 협의 등 다양한 상황의 이메일 템플릿을 제공합니다.</p>
                 </div>
                 
                 <div className="component-card">
                   <div className="component-icon">
                     <MessageSquare size={24} />
                   </div>
-                  <h4 style={{ color: 'var(--primary-color)', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
-                    대화 시뮬레이션
-                  </h4>
-                  <p style={{ color: 'var(--text-color)', fontSize: '14px', lineHeight: '1.5' }}>
-                    네트워킹 이벤트나 모임에서의 실전 대화를 미리 연습해볼 수 있습니다.
-                  </p>
+                  <h4>대화 시뮬레이션</h4>
+                  <p>네트워킹 이벤트나 모임에서의 실전 대화를 미리 연습해볼 수 있습니다.</p>
                 </div>
               </div>
             </div>
