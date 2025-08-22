@@ -123,7 +123,7 @@
   border-radius: 25px;
   font-weight: 600;
   font-size: 1.3rem;
-  background: linear-gradient(45deg, #28a745, #20c997);
+  background: #005793;
   color: white;
   border: none;
   cursor: pointer;
@@ -137,8 +137,9 @@
 }
 
 .device-test-start-button:hover {
+  background: #F76800;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 8px 20px rgba(247, 104, 0, 0.3);
 }
 
 .device-test-start-button:disabled {
@@ -208,4 +209,155 @@
 
 .device-test-error-button:hover {
   box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3) !important;
+}
+
+/* 향상된 모드 정보 스타일 */
+.mode-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mode-badges {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.time-badge,
+.focus-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.time-badge {
+  background: linear-gradient(45deg, #F76800, #ff8e53);
+  color: white;
+}
+
+.focus-badge {
+  background: linear-gradient(45deg, #005793, #4a90c2);
+  color: white;
+}
+
+.mode-description {
+  margin-bottom: 1.5rem !important;
+  font-size: 1rem !important;
+  line-height: 1.6;
+}
+
+.mode-features {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  border: 2px solid rgba(0, 87, 147, 0.2);
+}
+
+.mode-features h4 {
+  color: #005793;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-item {
+  padding: 0.5rem 0;
+  color: #333;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(0, 87, 147, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.mode-recommendation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: linear-gradient(45deg, rgba(247, 104, 0, 0.1), rgba(0, 87, 147, 0.1));
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  border: 1px dashed #F76800;
+}
+
+.recommendation-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.recommendation-text {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.recommendation-text strong {
+  color: #005793;
+}
+
+.recommendation-text em {
+  color: #F76800;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.device-test-start-button.enhanced {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #005793;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.device-test-start-button.enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.device-test-start-button.enhanced:hover::before {
+  left: 100%;
+}
+
+.device-test-start-button.enhanced:hover {
+  background: #F76800;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(247, 104, 0, 0.4);
+}
+
+.button-icon {
+  font-size: 1.2rem;
+  animation: rocket-bounce 2s ease-in-out infinite;
+}
+
+@keyframes rocket-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
 }

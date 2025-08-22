@@ -189,12 +189,14 @@ function DeviceTest() {
         micStatus !== 'recorded') {
       let mode = '';
       
-      if (micStatus === 'error') {
-        mode = 'text-only';
-      } else if (cameraStatus === 'success' && micStatus === 'success') {
-        mode = 'video-voice';
+      if (cameraStatus === 'success' && micStatus === 'success') {
+        mode = 'video-voice';  // 카메라 O + 마이크 O
+      } else if (cameraStatus === 'success' && micStatus === 'error') {
+        mode = 'camera-only';  // 카메라 O + 마이크 X
       } else if (cameraStatus === 'error' && micStatus === 'success') {
-        mode = 'voice-only';
+        mode = 'voice-only';   // 카메라 X + 마이크 O
+      } else {
+        mode = 'text-only';    // 카메라 X + 마이크 X
       }
       
       setInterviewMode(mode);
@@ -213,20 +215,57 @@ function DeviceTest() {
       case 'text-only':
         return {
           title: '📝 텍스트 면접 모드',
-          description: '키보드로 답변을 입력하여 면접을 진행합니다.'
+          description: '키보드로 답변을 입력하여 면접을 진행합니다.',
+          features: [
+            '⏰ 충분한 답변 시간 (5분)',
+            '✍️ 문법 검사 및 자동완성 지원',
+            '📊 실시간 글자수 및 읽기시간 표시',
+            '🧠 논리적 구조 가이드 제공'
+          ],
+          timeLimit: '5분',
+          focus: '논리적 사고력과 문서 작성 능력'
+        };
+      case 'camera-only':
+        return {
+          title: '📹 카메라 텍스트 면접 모드',
+          description: '카메라로 본인을 녹화하면서 텍스트로 답변을 작성하는 하이브리드 면접 환경입니다.',
+          features: [
+            '⏰ 충분한 답변 시간 (4분)',
+            '📹 표정 및 자세 녹화',
+            '✍️ 텍스트 답변 작성',
+            '🎯 비언어적 소통 + 논리적 사고 병행 평가'
+          ],
+          timeLimit: '4분',
+          focus: '비언어적 표현력과 논리적 문서 작성 능력'
         };
       case 'video-voice':
         return {
           title: '🎥 화상 면접 모드', 
-          description: '카메라 화면을 보며 음성으로 답변하는 실제 면접과 가장 유사한 환경입니다.'
+          description: '카메라 화면을 보며 음성으로 답변하는 실제 면접과 가장 유사한 환경입니다.',
+          features: [
+            '⏰ 실제 면접 환경 (3분)',
+            '📹 자세 및 표정 분석',
+            '🎤 실시간 음성 인식',
+            '👁️ 아이컨택 및 비언어적 소통 평가'
+          ],
+          timeLimit: '3분',
+          focus: '전체적인 면접 역량 (언어적 + 비언어적)'
         };
       case 'voice-only':
         return {
           title: '🎤 음성 면접 모드',
-          description: '가상 면접관과 음성으로 대화하며, 답변을 텍스트로 확인하고 수정할 수 있습니다.'
+          description: '가상 면접관과 음성으로 대화하며, 답변을 텍스트로 확인하고 수정할 수 있습니다.',
+          features: [
+            '⏰ 여유있는 답변 시간 (4분)',
+            '🎙️ 음성 인식 후 텍스트 수정 가능',
+            '🗣️ 발음 및 말하기 속도 분석',
+            '🎵 억양 및 음성 톤 평가'
+          ],
+          timeLimit: '4분',
+          focus: '음성 소통 능력과 발표 스킬'
         };
       default:
-        return { title: '', description: '' };
+        return { title: '', description: '', features: [], timeLimit: '', focus: '' };
     }
   };
 
@@ -353,13 +392,37 @@ function DeviceTest() {
 
             {isTestingComplete && (
               <div className="device-test-mode-info">
-                <h3>{getModeDescription().title}</h3>
-                <p>{getModeDescription().description}</p>
+                <div className="mode-header">
+                  <h3>{getModeDescription().title}</h3>
+                  <div className="mode-badges">
+                    <span className="time-badge">⏰ {getModeDescription().timeLimit}</span>
+                    <span className="focus-badge">🎯 {getModeDescription().focus}</span>
+                  </div>
+                </div>
+                
+                <p className="mode-description">{getModeDescription().description}</p>
+                
+                <div className="mode-features">
+                  <h4>이 모드의 특징:</h4>
+                  <ul className="features-list">
+                    {getModeDescription().features.map((feature, index) => (
+                      <li key={index} className="feature-item">{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="mode-recommendation">
+                  <div className="recommendation-icon">💡</div>
+                  <div className="recommendation-text">
+                    <strong>추천:</strong> 이 모드는 <em>{getModeDescription().focus}</em>을 중점적으로 평가합니다.
+                  </div>
+                </div>
                 
                 <button
-                  className="device-test-start-button"
+                  className="device-test-start-button enhanced"
                   onClick={startInterview}
                 >
+                  <span className="button-icon">🚀</span>
                   면접 시작하기
                 </button>
               </div>
