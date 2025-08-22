@@ -657,9 +657,10 @@ function PostureMonitor() {
     return (
         <div className="posture-monitor">
             <Layout>
-            
+            <div className="posture-wrapper">
+                <h2>자세교정</h2>
 
-            <div className="container">
+                <div className="container">
                 
                     {/* 모니터링 설정 섹션 */}
                     <div className="settings-section">
@@ -909,7 +910,7 @@ function PostureMonitor() {
                             )}
                         </div>
                     </div>
-                
+                </div>
             </div>
             </Layout>
             
