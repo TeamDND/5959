@@ -13,6 +13,7 @@ pip-wheel-metadata/
 *.egg-info/
 pip-selfcheck.json
 uploads/
+reports/
 
 # Node
 node_modules/
