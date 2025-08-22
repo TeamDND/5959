@@ -39,7 +39,7 @@ export default function Main() {
                     onClick={openMentalCare}
                     title="AI 멘탈 상담"
                 >
-                    💬
+                    <img src="/chat.jpg" alt="chat" />
                 </button>
             </div>
             
@@ -50,7 +50,7 @@ export default function Main() {
                     onClick={() => window.location.href='/posture'}
                     title="자세교정"
                 >
-                    🧘
+                    <img src="/Posture.jpg" alt="posture" />
                 </button>
             </div>
         </div>
