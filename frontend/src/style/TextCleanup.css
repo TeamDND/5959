@@ -2,11 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* TextCleanup 컴포넌트 스타일 */
+.textcleanup-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .container {
   font-family: 'Noto Sans', sans-serif;
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .container .header {
@@ -19,101 +26,123 @@
   color: var(--primary-color);
   margin-bottom: 10px;
 }
-.container .title {
+.title {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  width: 100%;
 }
-.container .title h2 {
-  font-size: 2.5rem;
-  color: var(--primary-color);
-  margin-bottom: 10px;
+.title h2 {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 700;
 }
-.container .title p {
-  font-size: 1.1rem;
-  color: #666;
+.title p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  font-weight: 400;
 }
 
 .content-wrapper {
   background: white;
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
 /* 분석 유형 선택 */
 .analysis-type-selector {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   text-align: center;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid #e9ecef;
 }
 
 .analysis-type-selector h3 {
-  font-size: 1.3rem;
-  color: var(--primary-color);
-  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .analysis-type-buttons {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .analysis-type-btn {
-  padding: 10px 20px;
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
+  padding: 15px 25px;
+  border: 2px solid #005793;
+  border-radius: 12px;
   background: white;
-  color: var(--primary-color);
+  color: #005793;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 87, 147, 0.1);
 }
 
 .analysis-type-btn:hover {
-  background: var(--secondary-color);
-  transform: translateY(-2px);
+  background: #F76800;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(247, 104, 0, 0.3);
 }
 
 .analysis-type-btn.active {
-  background: var(--primary-color);
+  background: #005793;
   color: white;
+  box-shadow: 0 4px 15px rgba(0, 87, 147, 0.3);
 }
 
 /* 탭 네비게이션 */
 .tabs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+  gap: 15px;
+  margin-bottom: 40px;
   justify-content: center;
   flex-wrap: wrap;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #e9ecef;
 }
 
 .tab {
-  padding: 12px 24px;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
+  padding: 15px 30px;
+  border: 2px solid #005793;
+  border-radius: 12px;
   background: white;
-  color: var(--primary-color);
+  color: #005793;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 140px;
+  min-width: 160px;
+  box-shadow: 0 2px 8px rgba(0, 87, 147, 0.1);
 }
 
 .tab:hover {
-  background: var(--secondary-color);
-  transform: translateY(-2px);
+  background: #F76800;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(247, 104, 0, 0.3);
 }
 
 .tab.active {
-  background: var(--primary-color);
+  background: #005793;
   color: white;
+  box-shadow: 0 4px 15px rgba(0, 87, 147, 0.3);
 }
 
 /* 콘텐츠 영역 */
@@ -132,45 +161,47 @@
 .input-group label {
   display: block;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 10px;
+  color: #2c3e50;
+  margin-bottom: 15px;
 }
 
 .input-group textarea {
   width: 100%;
-  padding: 15px;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
+  padding: 20px;
+  border: 2px solid #bdc3c7;
+  border-radius: 12px;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   resize: vertical;
-  min-height: 120px;
+  min-height: 150px;
   background: white;
+  transition: all 0.3s ease;
 }
 
 .input-group textarea:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(247, 104, 0, 0.1);
+  border-color: #005793;
+  box-shadow: 0 0 0 3px rgba(0, 87, 147, 0.1);
 }
 
 /* 링크 입력 */
 .link-input {
   width: 100%;
-  padding: 15px;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
+  padding: 20px;
+  border: 2px solid #bdc3c7;
+  border-radius: 12px;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   background: white;
+  transition: all 0.3s ease;
 }
 
 .link-input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(247, 104, 0, 0.1);
+  border-color: #005793;
+  box-shadow: 0 0 0 3px rgba(0, 87, 147, 0.1);
 }
 
 .link-examples {
@@ -214,22 +245,23 @@
 /* 버튼 */
 .submit-btn {
   width: 100%;
-  padding: 15px;
-  background: var(--primary-color);
+  padding: 20px;
+  background: #005793;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 87, 147, 0.3);
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #004a7a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #F76800;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(247, 104, 0, 0.4);
 }
 
 .submit-btn:disabled {
@@ -241,20 +273,21 @@
 
 /* 결과 영역 */
 .result {
-  margin-top: 30px;
-  padding: 25px;
+  margin-top: 40px;
+  padding: 30px;
   background: white;
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
 
 .result h3 {
   font-family: 'Noto Sans', sans-serif;
-  font-size: 20px;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .result.loading {

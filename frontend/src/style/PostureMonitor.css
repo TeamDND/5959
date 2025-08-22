@@ -8,6 +8,14 @@
   font-family: 'Noto Sans', sans-serif;
 }
 
+/* PostureMonitor wrapper */
+.posture-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+}
+
 /* 헤더 스타일 */
 .posture-monitor .header {
   background-color: var(--primary-color);

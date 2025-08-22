@@ -484,13 +484,14 @@ function TextCleanup() {
 
   return (
     <Layout>
-      <div className="container">
+      <div className="textcleanup-wrapper">
         <div className="title">
           <h2>🤖 AI 콘텐츠 분석 도구</h2>
           <p>텍스트, 이미지, 링크를 분석하여 분류하고 요약해드립니다</p>
         </div>
-
-        <div className="content-wrapper">
+        
+        <div className="container">
+          <div className="content-wrapper">
           {/* 분석 유형 선택 */}
           <div className="analysis-type-selector">
             <h3>📊 분석 유형 선택</h3>
@@ -640,6 +641,7 @@ function TextCleanup() {
 
           {renderResult()}
         </div>
+      </div>
       </div>
     </Layout>
   );

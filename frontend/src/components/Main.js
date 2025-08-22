@@ -20,12 +20,34 @@ export default function Main() {
                         {/* <button onClick={() => window.location.href='/interview'}>면접 분석</button> */}
                         <button onClick={() => window.location.href='/text-cleanup'}>AI 요약도구</button>
                         <button onClick={() => window.location.href='/job-analysis'}>AI 채용공고 분석</button>
-                        <button onClick={() => window.location.href='/mentalcare'}>AI 멘탈 상담</button>
+                        {/* <button onClick={() => window.location.href='/mentalcare'}>AI 멘탈 상담</button> */}
                         <button onClick={() => window.location.href='/self'}>AI 자기소개서 작성</button>
-                        <button onClick={() => window.location.href='/posture'}>자세교정</button>
+                        {/* <button onClick={() => window.location.href='/posture'}>자세교정</button> */}
                         <button onClick={() => window.location.href='/networking-ai'}>AI 네트워크</button>
                     </div>
                 </div>
+            </div>
+            
+            {/* 채팅 버튼 - 오른쪽 하단 고정 */}
+            <div className="chat-button-container">
+                <button 
+                    className="chat-button"
+                    onClick={() => window.location.href='/mentalcare'}
+                    title="AI 멘탈 상담"
+                >
+                    💬
+                </button>
+            </div>
+            
+            {/* 자세교정 버튼 - 오른쪽 하단 고정 */}
+            <div className="posture-button-container">
+                <button 
+                    className="posture-button"
+                    onClick={() => window.location.href='/posture'}
+                    title="자세교정"
+                >
+                    🧘
+                </button>
             </div>
         </div>
     )
