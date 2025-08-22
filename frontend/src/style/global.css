@@ -72,12 +72,17 @@ code {
 
 /* 헤더 스타일 */
 .header {
-  /* background-color: var(--primary-color); */
+  background-color: white;
   color: var(--white);
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid #eceaea;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
 }
 
 .header h1 {
