@@ -760,7 +760,7 @@ export default function Interview() {
               <div className="answer-helper">
                 <div className="helper-text">💡 텍스트 모드 도움말</div>
                 <div className="helper-tips">
-                  • 충분한 시간({Math.floor(answerTimeLimit/60)}분)이 주어집니다
+                  • 충분한 시간({Math.floor(answerTimeLimit/60)}분)이 주어집니다 
                   • 문법 검사와 자동완성을 활용하세요
                   • 논리적 구조로 답변을 작성해보세요
                 </div>
@@ -1049,16 +1049,13 @@ export default function Interview() {
                   <div className="video-helper">
                     <div className="helper-text">🎥 화상면접 모드</div>
                     <div className="helper-tips">
-                      • 실제 면접과 동일한 환경({Math.floor(answerTimeLimit/60)}분)
-                      • 자세와 표정도 평가에 포함됩니다
-                      • 자연스럽게 카메라를 바라보며 답변하세요
+                      • 실제 면접과 동일한 환경({Math.floor(answerTimeLimit/60)}분) <br />
+                      • 자세와 표정도 평가에 포함됩니다 <br />
+                      • 자연스럽게 카메라를 바라보며 답변하세요 <br />
                     </div>
                   </div>
                   
-                  <div className="posture-indicator">
-                    <span className="indicator-icon">📐</span>
-                    <span className="indicator-text">자세 양호</span>
-                  </div>
+
                   
                   <div className="interview-voice-instruction">
                     🎤 음성으로 답변해주세요 (실시간 인식 중)
@@ -1484,12 +1481,12 @@ export default function Interview() {
 
   // 모드에 따라 렌더링
   if (interviewMode === 'voice-only') {
-    return <Layout>{renderVoiceOnlyMode()}</Layout>;
+    return  <>{renderVoiceOnlyMode()}</>;
   } else if (interviewMode === 'video-voice') {
-    return <Layout>{renderVideoVoiceMode()}</Layout>;
+    return <>{renderVideoVoiceMode()}</>;
   } else if (interviewMode === 'camera-only') {
-    return <Layout>{renderTextOnlyModeNew()}</Layout>; // 카메라 O + 마이크 X
+    return <>{renderTextOnlyModeNew()}</>; // 카메라 O + 마이크 X
   } else {
-    return <Layout>{renderPureTextMode()}</Layout>; // 카메라 X + 마이크 X
+    return <>{renderPureTextMode()}</>; // 카메라 X + 마이크 X
   }
 }

@@ -64,11 +64,11 @@
 }
 
 .job-analysis-input-section {
-  background: #f8f9fa;
+  background: #f1f1f1;
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-right: 3px solid #005793;
+  /* border-right: 3px solid #005793; */
   position: relative;
 }
 
@@ -79,16 +79,16 @@
   right: -3px;
   width: 3px;
   height: 100%;
-  background: #005793;
+
   border-radius: 0 15px 15px 0;
 }
 
 .job-analysis-result-section {
-  background: white;
+  background: #f1f1f1;
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-left: 3px solid #005793;
+  /* border-left: 3px solid #005793; */
   position: relative;
   overflow-y: auto;
   max-height: 70vh;
@@ -113,7 +113,7 @@
   display: block;
   margin-bottom: 0.8rem;
   font-weight: 600;
-  color: #005793;
+  color: #333;
   font-size: 1.1rem;
 }
 
@@ -188,7 +188,7 @@
   padding: 0.8rem 0;
   border-bottom: 1px solid #005793;
   font-size: 0.9rem;
-  color: #005793;
+  color: #333;
   white-space: normal;
   word-wrap: break-word;
   line-height: 1.4;
@@ -211,18 +211,18 @@
   border-radius: 8px;
   font-size: 1rem;
   background: white;
-  color: #005793;
+  color: #333;
 }
 
 .job-analysis-select:focus {
-  border-color: #005793;
+  border-color: #333;
   outline: none;
 }
 
 .job-analysis-tab-container {
   display: flex;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #E6F0F5;
+
   gap: 0.5rem;
   padding: 0;
 }
@@ -230,9 +230,9 @@
 .job-analysis-tab {
   padding: 1rem 2rem;
   background: transparent;
-  color: #005793;
+  color: #fff;
   border: none;
-  border-bottom: 3px solid transparent;
+  background-color: #999;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -290,7 +290,7 @@
   white-space: normal;
   word-wrap: break-word;
   line-height: 1.5;
-  color: #005793;
+  color: #333;
 }
 
 .job-analysis-job-info-item:last-child {
@@ -298,14 +298,14 @@
 }
 
 .job-analysis-job-info-item strong {
-  color: #005793;
+  color: #333;
   font-weight: 700;
 }
 
 .job-analysis-start-interview-button {
   width: 100%;
   padding: 1rem 2rem;
-  background: #F76800;
+  background: #005793;
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
@@ -323,7 +323,7 @@
 }
 
 .job-analysis-section-title {
-  color: #005793;
+  color: #333;
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;

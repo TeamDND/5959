@@ -187,6 +187,102 @@ function TextCleanup() {
   const renderResult = () => {
     if (!result) return null;
 
+    // JSON 문자열인 경우 파싱 시도
+    let parsedResult = result;
+    if (typeof result === 'string') {
+      try {
+        parsedResult = JSON.parse(result);
+      } catch (e) {
+        console.error('JSON 파싱 실패:', e);
+      }
+    }
+
+    // 텍스트 분석 결과 처리
+    if (parsedResult.type === 'text' && parsedResult.summary) {
+      const summary = parsedResult.summary;
+      const classification = summary.classification || '';
+      const mainContent = summary.main_content || '';
+      const keyPoints = summary.key_points || [];
+      const sentiment = summary.sentiment || '';
+      const businessInfo = summary.business_info || '';
+      const recommendations = summary.recommendations || [];
+      
+      return (
+        <div className="result">
+          <h3>📋 텍스트 분석 결과</h3>
+          
+          {/* 분류 정보 */}
+          {classification && (
+            <div className="result-section">
+              <h4 className="result-section-title">📊 내용 분류</h4>
+              <div className="result-section-content classification">
+                {classification}
+              </div>
+            </div>
+          )}
+
+          {/* 감정 분석 */}
+          {sentiment && (
+            <div className="result-section">
+              <h4 className="result-section-title">😊 감정 분석</h4>
+              <div className="result-section-content sentiment">
+                {sentiment}
+              </div>
+            </div>
+          )}
+
+          {/* 주요 내용 */}
+          {mainContent && (
+            <div className="result-section">
+              <h4 className="result-section-title">📋 주요 내용</h4>
+              <div className="result-section-content main-content">
+                {mainContent}
+              </div>
+            </div>
+          )}
+
+          {/* 핵심 포인트 */}
+          {keyPoints && keyPoints.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">🎯 핵심 포인트</h4>
+              <div className="result-section-content key-points">
+                <ul>
+                  {keyPoints.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* 비즈니스 정보 */}
+          {businessInfo && (
+            <div className="result-section">
+              <h4 className="result-section-title">🏢 비즈니스 정보</h4>
+              <div className="result-section-content business-info">
+                {businessInfo}
+              </div>
+            </div>
+          )}
+
+          {/* 추천사항 */}
+          {recommendations && recommendations.length > 0 && (
+            <div className="result-section">
+              <h4 className="result-section-title">💡 추천사항</h4>
+              <div className="result-section-content recommendations">
+                <ul>
+                  {recommendations.map((rec, index) => (
+                    <li key={index}>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // 기존 이미지/링크 분석 결과 처리
     if (result.type === 'image' && typeof result.summary === 'object') {
       const classification = result.summary.classification || '';
       const mainContent = result.summary.main_content || '';
@@ -310,83 +406,6 @@ function TextCleanup() {
           )}
         </div>
       );
-    } else if (result.type === 'text' && typeof result.summary === 'object') {
-      const classification = result.summary.classification || '';
-      const mainContent = result.summary.main_content || '';
-      const keyPoints = result.summary.key_points || [];
-      const sentiment = result.summary.sentiment || '';
-      const businessInfo = result.summary.business_info || '';
-      const recommendations = result.summary.recommendations || [];
-      
-      return (
-        <div className="result">
-          <h3>📋 텍스트 분석 결과</h3>
-          
-          {/* 분류 정보 */}
-          <div className="result-section">
-            <h4 className="result-section-title">📊 내용 분류</h4>
-            <div className="result-section-content classification">
-              {classification}
-            </div>
-          </div>
-
-          {/* 감정 분석 */}
-          {sentiment && (
-            <div className="result-section">
-              <h4 className="result-section-title">😊 감정 분석</h4>
-              <div className="result-section-content sentiment">
-                {sentiment}
-              </div>
-            </div>
-          )}
-
-          {/* 주요 내용 */}
-          <div className="result-section">
-            <h4 className="result-section-title">📋 주요 내용</h4>
-            <div className="result-section-content main-content">
-              {mainContent}
-            </div>
-          </div>
-
-          {/* 핵심 포인트 */}
-          {keyPoints && keyPoints.length > 0 && (
-            <div className="result-section">
-              <h4 className="result-section-title">🎯 핵심 포인트</h4>
-              <div className="result-section-content key-points">
-                <ul>
-                  {keyPoints.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-
-          {/* 비즈니스 정보 */}
-          {businessInfo && (
-            <div className="result-section">
-              <h4 className="result-section-title">🏢 비즈니스 정보</h4>
-              <div className="result-section-content business-info">
-                {businessInfo}
-              </div>
-            </div>
-          )}
-
-          {/* 추천사항 */}
-          {recommendations && recommendations.length > 0 && (
-            <div className="result-section">
-              <h4 className="result-section-title">💡 추천사항</h4>
-              <div className="result-section-content recommendations">
-                <ul>
-                  {recommendations.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
-      );
     } else if (result.type === 'link' && typeof result.summary === 'object') {
       const title = result.summary.title || '';
       const description = result.summary.description || '';
@@ -469,6 +488,7 @@ function TextCleanup() {
         </div>
       );
     } else {
+      // 기타 경우 JSON을 보기 좋게 표시
       return (
         <div className="result">
           <h3>📋 분석 결과</h3>
