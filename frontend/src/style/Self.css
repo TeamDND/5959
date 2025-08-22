@@ -29,3 +29,12 @@
   transform: none;
   box-shadow: none;
 }
+
+.container {
+  font-family: 'Noto Sans', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 50vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
