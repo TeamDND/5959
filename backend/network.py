@@ -55,7 +55,7 @@ def networking_ai():
 
 def generate_networking_prompt(ai_type, user_input, user_context):
     """네트워킹 AI 프롬프트 생성"""
-    user_name = user_context.get('name', '김준혁')
+    user_name = user_context.get('name', 'OOO')
     
     base_prompt = f"""
 당신은 취업준비생을 위한 네트워킹 전문가입니다.

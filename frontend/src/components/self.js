@@ -119,7 +119,7 @@ function Self() {
       setLoading(false);
     }
   };
-  return (
+  return (/* 리턴 */
     <>
     <Layout>
       <div className="title-wrapper">
