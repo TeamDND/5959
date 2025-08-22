@@ -1,4 +1,4 @@
-# 웹 프레임워크
+# Web Framework
 Flask==2.3.3
 Werkzeug==2.3.7
 Jinja2==3.1.2
@@ -8,41 +8,41 @@ click==8.1.7
 blinker==1.6.3
 flask-cors==4.0.0
 
-# 환경 설정
+# Environment Configuration
 python-dotenv==1.0.0
 
-# AI/ML 라이브러리
+# AI/ML Libraries
 google-generativeai==0.8.5
 openai==1.58.1
 anthropic==0.40.0
 
-# 데이터 처리
+# Data Processing
 requests==2.31.0
 beautifulsoup4==4.12.2
 numpy==1.26.4
 
-# 이미지/비디오 처리
+# Image/Video Processing
 opencv-python==4.8.1.78
-opencv-contrib-python==4.11.0.86
+opencv-contrib-python==4.8.1.78
 mediapipe==0.10.21
 Pillow==10.1.0
 
-# 문서 처리
+# Document Processing
 reportlab==4.0.7
 pytesseract==0.3.10
 pdfplumber==0.10.0
 pyhwp==0.1b12
 
-# 웹 스크래핑
+# Web Scraping
 selenium==4.35.0
 webdriver-manager==4.0.2
 
-# 기타 유틸리티
+# Utilities
 attrs==25.3.0
 certifi==2025.8.3
 urllib3==2.5.0
 
-# 의존성 호환성을 위한 추가 패키지
+# Dependency Compatibility
 protobuf==4.25.8
 grpcio-status==1.62.3
 absl-py==2.3.1

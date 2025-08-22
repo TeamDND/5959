@@ -6,6 +6,8 @@ __pycache__/
 .Python
 env/
 venv/
+venv310/
+venv310_backup/
 pip-wheel-metadata/
 .installed.cfg
 *.egg-info/

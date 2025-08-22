@@ -43,7 +43,7 @@
 .job-analysis-result-section {
   flex: 1;
   min-width: 0;
-  min-width: 600px;
+  /* min-width: 600px; */
 }
 
 .job-analysis-input-group {
