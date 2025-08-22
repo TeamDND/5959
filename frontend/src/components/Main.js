@@ -1,6 +1,10 @@
+import React from 'react';
+import { useMentalCare } from '../App';
 import '../style/Main.css';
 
 export default function Main() {
+    const { openMentalCare } = useMentalCare();
+    
     return (
         <div className="main-container">
             <div className="main-content">
@@ -32,7 +36,7 @@ export default function Main() {
             <div className="chat-button-container">
                 <button 
                     className="chat-button"
-                    onClick={() => window.location.href='/mentalcare'}
+                    onClick={openMentalCare}
                     title="AI 멘탈 상담"
                 >
                     💬
