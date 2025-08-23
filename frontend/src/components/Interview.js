@@ -1389,22 +1389,6 @@ export default function Interview() {
             </div>
           </div>
 
-          {/* 현재 질문 */}
-          {currentQuestion && (
-            <div className="chat-message ai-message">
-              <div className="chat-avatar">🤖</div>
-              <div className="chat-bubble ai-bubble current-question">
-                <div className="chat-name">AI 면접관</div>
-                <div className="question-badge">질문 {currentIndex + 1}</div>
-                <div className="chat-text">{currentQuestion.text}</div>
-                <div className="question-info">
-                  <span className="difficulty-tag">난이도: {currentQuestion.difficulty}</span>
-                  <span className="time-tag">제한시간: {Math.floor(answerTimeLimit/60)}분</span>
-                </div>
-                <div className="chat-time">진행 중</div>
-              </div>
-            </div>
-          )}
 
           {/* 기존 메시지들 */}
           {messages.map((message) => (

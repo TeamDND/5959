@@ -1522,6 +1522,22 @@
   transform: none;
 }
 
+/* 특정 chat-button들만 박스형으로 유지 */
+.chat-button.skip-button,
+.chat-button.send-button {
+  border-radius: 6px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.7rem 1.5rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  box-shadow: none !important;
+}
+
 @keyframes messageSlideIn {
   from {
     opacity: 0;
